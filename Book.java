@@ -1,3 +1,5 @@
+import java.util.Calendar;
+
 public class Book
 {
     private String title, author_fname, author_lname, genre_name, genre_desc;
@@ -64,37 +66,37 @@ public class Book
     }
 
     //setters
-    public void getTitle( String title )
+    public void setTitle( String title )
     {
         this.title = title;
     }
 
-    public void getAuthorFName( String name )
+    public void setAuthorFName( String name )
     {
         this.author_fname = name;
     }        
     
-    public void getAuthorLName( String name )
+    public void setAuthorLName( String name )
     {
         this.author_lname = name;
     }
                 
-    public void getGenreName( String name )
+    public void setGenreName( String name )
     {
         this.genre_name = name;
     }
                 
-    public void getGenreDesc( String desc )
+    public void setGenreDesc( String desc )
     {
         this.genre_desc = desc;
     }
 
-    public void getNumCopies( int num )
+    public void setNumCopies( int num )
     {
         this.num_copies = num;
     }
 
-    public void getReleaseDate( Calendar date )
+    public void setReleaseDate( Calendar date )
     {
         this.release_date = date;
     }

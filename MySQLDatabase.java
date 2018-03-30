@@ -2,6 +2,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.ArrayList;
 
+//takes care of pushing changes that occur in the library to the database
 public class MySQLDatabase
 {
     private HashMap<String, String> data;
