@@ -3,7 +3,7 @@ import java.util.*;
 public class Book
 {
     private String title, author_fname, author_lname, genre_name, genre_desc;
-    private int num_copies, id;
+    private int num_copies, id, isbn;
     private Calendar release_date, due_date;
 
     public Book()
@@ -15,12 +15,13 @@ public class Book
         this.genre_desc     = "";
         this.num_copies     = 0;
         this.id             = 0;
+        this.isbn           = 0;
         this.release_date   = Calendar.getInstance();
         this.due_date       = null;
     }
 
     public Book( String title, String author_fname, String author_lname, String genre_name, 
-        String genre_desc, int num_copies, int id, Calendar release_date )
+        String genre_desc, int num_copies, int id, int isbn, Calendar release_date )
     {
         this.title = title;
         this.author_fname = author_fname;
@@ -29,6 +30,7 @@ public class Book
         this.genre_desc = genre_desc;
         this.num_copies = num_copies;
         this.id = id;
+        this.isbn = isbn;
         this.release_date = release_date;
         this.due_date = null;
     }
@@ -36,19 +38,20 @@ public class Book
     public Book( ArrayList<String> vals )
     {
         Calendar temp = Calendar.getInstance();
-        String date = vals.get(2).split( " " )[0];
+        String date = vals.get(3).split( " " )[0];
         int yr = Integer.parseInt( date.split("-")[0] );
         int mo = Integer.parseInt( date.split("-")[1] ) - 1;
         int day = Integer.parseInt( date.split("-")[2] );
         temp.set( yr, mo, day ); //YYYY-MM-DD
 
-        this.title = vals.get(1);
-        this.author_fname = vals.get(4);
-        this.author_lname = vals.get(5);
-        this.genre_name = vals.get(6);
-        this.genre_desc = vals.get(7);
-        this.num_copies = Integer.parseInt( vals.get(3) );
+        this.title = vals.get(2);
+        this.author_fname = vals.get(5);
+        this.author_lname = vals.get(6);
+        this.genre_name = vals.get(7);
+        this.genre_desc = vals.get(8);
+        this.num_copies = Integer.parseInt( vals.get(4) );
         this.id = Integer.parseInt( vals.get(0) );
+        this.isbn = Integer.parseInt( vals.get(1) );
         this.release_date = temp;
         this.due_date = null;
     }
@@ -87,6 +90,11 @@ public class Book
     public int getId()
     {
         return this.id;
+    }
+
+    public int getISBN()
+    {
+        return this.isbn;
     }
 
     public Calendar getReleaseDate()
@@ -133,6 +141,11 @@ public class Book
     public void setId( int id )
     {
         this.id = id;
+    }
+
+    public void setISBN( int isbn )
+    {
+        this.isbn = isbn;
     }
 
     public void setReleaseDate( Calendar date )

@@ -42,6 +42,7 @@ CREATE TABLE genres(
 
 CREATE TABLE books(
     book_id int,
+    isbn int(13),
     title varchar(255),
     release_date date,
     num_copies int,
