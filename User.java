@@ -1,7 +1,9 @@
+import java.util.ArrayList;
+
 public class User
 {
-    private String username, passwordHash, fname, lname, role;
-    private int age;
+    private String username, passwordHash, fname, lname;
+    private int age, id, role;
 
     public User()
     {
@@ -9,11 +11,12 @@ public class User
         this.passwordHash = "";
         this.fname = "";
         this.lname = "";
-        this.role = "";
+        this.role = 0;
         this.age = 0;
+        this.id = 0;
     }
 
-    public User( String username, String pass, String fname, String lname, String role, int age )
+    public User( String username, String pass, String fname, String lname, int role, int age, int id )
     {
         this.username = username;
         this.passwordHash = pass;
@@ -21,6 +24,18 @@ public class User
         this.lname = lname;
         this.role = role;
         this.age = age;
+        this.id = id;
+    }
+
+    public User( ArrayList<String> vals )
+    {
+        this.username = vals.get(1);
+        this.passwordHash = vals.get(2);
+        this.fname = vals.get(3);
+        this.lname = vals.get(4);
+        this.role = Integer.parseInt( vals.get(6) );
+        this.age = Integer.parseInt( vals.get(5) );
+        this.id = Integer.parseInt( vals.get(0) );
     }
 
     //getters
@@ -44,7 +59,7 @@ public class User
         return this.lname;
     }
 
-    public String getRole()
+    public int getRole()
     {
         return this.role;
     }
@@ -52,6 +67,11 @@ public class User
     public int getAge()
     {
         return this.age;
+    }
+
+    public int getId()
+    {
+        return this.id;
     }
 
     //setters
@@ -75,7 +95,7 @@ public class User
         this.lname = lname;
     }
 
-    public void setRole( String role )
+    public void setRole( int role )
     {
         this.role = role;
     }
@@ -83,5 +103,10 @@ public class User
     public void setAge( int age )
     {
         this.age = age;
+    }
+
+    public void setId( int id )
+    {
+        this.id = id;
     }
 }

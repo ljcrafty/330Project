@@ -180,7 +180,7 @@ public class MySQLDatabase
             PreparedStatement stmt = this.prepare( query, params );
             ResultSet rs = stmt.executeQuery();
 
-            return this.parseResultSet(rs, true);
+            return this.parseResultSet(rs, false);
         }
         catch( Exception e )
         {
