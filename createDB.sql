@@ -1,3 +1,4 @@
+CREATE DATABASE Library;
 USE Library;
 
 DROP TABLE IF EXISTS priv_role;
