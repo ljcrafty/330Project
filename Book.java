@@ -13,7 +13,6 @@ public class Book
         this.author_lname   = "";
         this.genre_name     = "";
         this.genre_desc     = "";
-        this.num_copies     = 0;
         this.id             = 0;
         this.isbn           = 0;
         this.release_date   = Calendar.getInstance();
@@ -21,14 +20,13 @@ public class Book
     }
 
     public Book( String title, String author_fname, String author_lname, String genre_name, 
-        String genre_desc, int num_copies, int id, int isbn, Calendar release_date )
+        String genre_desc, int id, int isbn, Calendar release_date )
     {
         this.title = title;
         this.author_fname = author_fname;
         this.author_lname = author_lname;
         this.genre_name = genre_name;
         this.genre_desc = genre_desc;
-        this.num_copies = num_copies;
         this.id = id;
         this.isbn = isbn;
         this.release_date = release_date;
@@ -49,7 +47,6 @@ public class Book
         this.author_lname = vals.get(6);
         this.genre_name = vals.get(7);
         this.genre_desc = vals.get(8);
-        this.num_copies = Integer.parseInt( vals.get(4) );
         this.id = Integer.parseInt( vals.get(0) );
         this.isbn = Integer.parseInt( vals.get(1) );
         this.release_date = temp;
@@ -80,11 +77,6 @@ public class Book
     public String getGenreDesc()
     {
         return this.genre_desc;
-    }
-
-    public int getNumCopies()
-    {
-        return this.num_copies;
     }
 
     public int getId()
@@ -133,10 +125,6 @@ public class Book
         this.genre_desc = desc;
     }
 
-    public void setNumCopies( int num )
-    {
-        this.num_copies = num;
-    }
 
     public void setId( int id )
     {
