@@ -38,8 +38,8 @@ public class Library
             this.db.connect();
             
             //books
-            String query = "SELECT book_id, isbn, title, release_date, authors.first_name, " + 
-                "authors.last_name, genres.name, genres.description FROM book JOIN authors USING " + 
+            String query = "SELECT book_id, isbn, title, release_date, num_copies, authors.first_name, " + 
+                "authors.last_name, genres.name, genres.description FROM books JOIN authors USING " + 
                 "(author_id) JOIN genres USING (genre_id)";
             ArrayList<String> params = new ArrayList<String>();
 
@@ -159,6 +159,21 @@ public class Library
         return null;
     }
 
+    /**
+        Gets the number of available copies of a book in the library (not total copies, but 
+            copies that haven't been loaned)
+        @param id - the id of the book to get the number of copies for
+        @return the number of available copies of the book or -1 if it doesn't exist
+     */
+    public int getNumCopies( int id )
+    {
+        if( this.copiesAvailable.containsKey( (Integer) id ) )
+        {
+            return this.copiesAvailable.get( (Integer) id );
+        }
+
+        return -1;
+    }
 
     //setters
     /**
@@ -172,6 +187,13 @@ public class Library
         if( this.loans.containsKey( (Integer) id ) && this.getNumCopies(id) > 0 )
         {
             ArrayList<Book> temp = this.loans.get( (Integer) id );
+
+            //can't take out more than one copy of the same book
+            if( temp.contains( book ) || this.reservations.get( (Integer) id ).contains(book) ||
+                !this.setNumCopies( id, this.getNumCopies(id) - 1 ) ) //updates number of available books
+            {
+                return false;
+            }
 
             String query = "INSERT INTO borrowed_book VALUES( ?, ?, false, ? )";
             ArrayList<String> params = new ArrayList<String>();
@@ -292,6 +314,21 @@ public class Library
         return false;
     }
 
+    /**
+        Sets the number of available copies of a book
+        @param id - the id of the book to set the available number for
+        @param num - the number of available copies to record
+        @return whether or not the change was successful
+     */
+    public boolean setNumCopies( int id, int num )
+    {
+        if( this.copiesAvailable.containsKey( (Integer) id ) && num >= 0 )
+        {
+            this.copiesAvailable.put( (Integer) id, (Integer) num );
+            return true;
+        }
+        return false;
+    }
 
     //TODO: stuff about authenticating, etc.
     //TODO: modify database here too
@@ -309,6 +346,7 @@ public class Library
         }
 
         this.books.put( book.getId(), book );
+        this.copiesAvailable.put( book.getId(), book.getNumCopies() );
         return true;
     }
 
@@ -319,15 +357,16 @@ public class Library
         @param author_lname - the author's last name of the book to add
         @param genre_name - the genre name of the book to add
         @param genre_desc - the genre description of the book to add
+        @param num_copies - the total number of copies in the library of the book to add
         @param id - the book id of the book to add
         @param isbn - the ISBN number of the book to add
         @param release_date - the release date of the book to add
         @return the book that was created from the params, or null if addition was unsuccessful
      */
     public Book addBook( String title, String author_fname, String author_lname, String genre_name, 
-        String genre_desc, int id, int isbn, Calendar release_date )
+        String genre_desc, int num_copies, int id, int isbn, Calendar release_date )
     {
-        Book temp = new Book( title, author_fname, author_lname, genre_name, genre_desc, 
+        Book temp = new Book( title, author_fname, author_lname, genre_name, genre_desc, num_copies, 
             id, isbn, release_date );
         
         if( this.addBook(temp) )
