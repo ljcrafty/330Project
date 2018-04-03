@@ -20,7 +20,7 @@ CREATE TABLE roles(
 CREATE TABLE users(
     user_id int,
     username varchar(30),
-    password varchar(50),
+    password varchar(64),
     first_name varchar(50),
     last_name varchar(50),
     age int,

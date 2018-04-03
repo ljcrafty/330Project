@@ -76,7 +76,7 @@ public class Library
                 ArrayList<String> temp = data.get(i);
 
                 //reserved, not borrowed
-                if( temp.get(2) == "true" )
+                if( temp.get(2) == 1 )
                 {
                     Book book = this.getBook( Integer.parseInt(temp.get(0)) );
 
