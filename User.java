@@ -121,4 +121,22 @@ public class User
     {
         this.id = id;
     }
+
+    /**
+     * Method used to return values of User object as ArrayList for use as parameters for queries
+     * @param id include id or not
+     * @return  returns the User object constructed as parameter
+     */
+    public ArrayList<String> getUserParameters(boolean id){
+        ArrayList<String> temp = new ArrayList<>();
+        if(id) temp.add(this.id+"");
+        temp.add(username);
+        temp.add(passwordHash);
+        temp.add(fname);
+        temp.add(lname);
+        temp.add(age+"");
+        temp.add(role+"");
+
+        return temp;
+    }
 }

@@ -1,5 +1,3 @@
-package Controllers;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,7 +9,7 @@ public class UserController {
     //key = token
     //value = privilege level
     private HashMap<String,Integer> loggedUsers;
-    private Controllers.DatabaseController dbController;
+    private MySQLDatabase dbController;
 
     // PUBLIC METHODS
 
@@ -19,21 +17,32 @@ public class UserController {
      * Method used to log in into system
      * @param username
      * @param password
-     * @return
+     * @return returns JWToken on success, "no user" if the username is not found and "invalid password" if the password is wrong.
      */
     public String login(String username, String password){
         String query = "SELECT username, password, role_id FROM users JOIN user_role USING (user_id) WHERE username = ?";
         ArrayList<String> params = new ArrayList<>();
         params.add(username);
 
-        ArrayList<ArrayList<String>> data = dbController.getData(query,params);
-        if (data == null) return null;
+        ArrayList<ArrayList<String>> data = null;
+        try {
+            data = dbController.getData(query,params);
+        } catch (DLException e) {
+            //TODO: log error
+        }
+        if (data == null) return "no user";
 
         else{
             User temp = new User(data.get(0).get(0),data.get(0).get(1), data.get(0).get(2));
-
+            if(org.mindrot.jbcrypt.BCrypt.checkpw(password,temp.getPasswordHash())){
+                //TODO: find something similar to JWT
+                return "token_placeholder";
+            }
+            else{
+                return "invalid password";
+            }
         }
-        return "";
+
     }
 
     /**
@@ -50,7 +59,17 @@ public class UserController {
         return false;
     }
 
-    public boolean addUser(String username, String password){
+    /**
+     * Method used to add new user to database
+     * @param newUser
+     * @return
+     */
+    public boolean addUser(User newUser){
+        String plaintext = newUser.getPasswordHash();
+
+        newUser.setPasswordHash(org.mindrot.jbcrypt.BCrypt.hashpw(plaintext, org.mindrot.jbcrypt.BCrypt.gensalt(12)));
+
+        addToDatabase(newUser);
 
         return false;
     }
@@ -58,8 +77,26 @@ public class UserController {
 
 
     // PRIVATE METHODS
-    private boolean authenticate(String token, id required_privilege){
-
+    private boolean authenticate(String token, int required_privilege){
+        //TODO: find something similar to JWT.
         return false;
     }
+
+    /**
+     Adds a user to the Library and database
+     @param user - the user to add
+     @return whether or not the addition was successful
+     */
+    private boolean addToDatabase( User user )
+    {
+        /**
+         * query = "SELECT user_id, username, password, first_name, last_name, age, role_id FROM users JOIN user_role USING (user_id)";
+         */
+        String query = "INSERT INTO users(username,password,first_name,last_name,age,role_id) VALUES (?,?,?,?,?,?);";
+        boolean check = dbController.setData(query,user.getUserParameters(false));              //not sure if user ID is autoincremented or not.
+
+        return check;
+    }
+
+
 }
