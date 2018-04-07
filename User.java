@@ -38,6 +38,18 @@ public class User
         this.id = Integer.parseInt( vals.get(0) );
     }
 
+    /**
+     * Just fetch username, pw and role from the DB for login check.
+     * @param username
+     * @param hashedPass
+     * @param role
+     */
+    public User(String username, String hashedPass, String role){
+        this.username = username;
+        this.passwordHash = hashedPass;
+        this.role = Integer.parseInt(role);
+    }
+
     //getters
     public String getUsername()
     {
