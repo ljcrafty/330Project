@@ -3,17 +3,18 @@ import java.util.*;
 public class Book
 {
     private String title, author_fname, author_lname, genre_name, genre_desc;
-    private int num_copies, id, isbn;
+    private int id, isbn;
     private Calendar release_date, due_date;
+    private boolean detail;
 
     public Book()
     {
+        detail = false;
         this.title          = "";
         this.author_fname   = "";
         this.author_lname   = "";
         this.genre_name     = "";
         this.genre_desc     = "";
-        this.num_copies     = 0;
         this.id             = 0;
         this.isbn           = 0;
         this.release_date   = Calendar.getInstance();
@@ -21,22 +22,24 @@ public class Book
     }
 
     public Book( String title, String author_fname, String author_lname, String genre_name, 
-        String genre_desc, int num_copies, int id, int isbn, Calendar release_date )
+        String genre_desc,int id, int isbn, Calendar release_date )
     {
+        detail = true;
         this.title = title;
         this.author_fname = author_fname;
         this.author_lname = author_lname;
         this.genre_name = genre_name;
         this.genre_desc = genre_desc;
-        this.num_copies = num_copies;
         this.id = id;
         this.isbn = isbn;
         this.release_date = release_date;
         this.due_date = null;
     }
 
-    public Book( ArrayList<String> vals )
+    public Book( ArrayList<String> vals, boolean isDetail )
     {
+        this.detail = isDetail;
+
         Calendar temp = Calendar.getInstance();
         String date = vals.get(3).split( " " )[0];
         int yr = Integer.parseInt( date.split("-")[0] );
@@ -45,11 +48,10 @@ public class Book
         temp.set( yr, mo, day ); //YYYY-MM-DD
 
         this.title = vals.get(2);
-        this.author_fname = vals.get(5);
-        this.author_lname = vals.get(6);
-        this.genre_name = vals.get(7);
-        this.genre_desc = vals.get(8);
-        this.num_copies = Integer.parseInt( vals.get(4) );
+        this.author_fname = vals.get(4);
+        this.author_lname = vals.get(5);
+        this.genre_name = vals.get(6);
+        this.genre_desc = vals.get(7);
         this.id = Integer.parseInt( vals.get(0) );
         this.isbn = Integer.parseInt( vals.get(1) );
         this.release_date = temp;
@@ -105,6 +107,10 @@ public class Book
     public Calendar getDueDate()
     {
         return this.due_date;
+    }
+
+    public boolean isDetail() {
+        return detail;
     }
 
     //setters
@@ -167,5 +173,16 @@ public class Book
         temp.set( yr, mo, day );
 
         this.due_date = temp;
+    }
+    public void setDetail(boolean detail) {
+        this.detail = detail;
+    }
+
+    public ArrayList<String> getBookParameter(){
+        ArrayList<String> temp = new ArrayList<>();
+
+        temp.add(this.getId()+"");
+
+        return temp;
     }
 }
