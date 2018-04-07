@@ -38,6 +38,18 @@ public class User
         this.id = Integer.parseInt( vals.get(0) );
     }
 
+    /**
+     * Just fetch username, pw and role from the DB for login check.
+     * @param username
+     * @param hashedPass
+     * @param role
+     */
+    public User(String username, String hashedPass, String role){
+        this.username = username;
+        this.passwordHash = hashedPass;
+        this.role = Integer.parseInt(role);
+    }
+
     //getters
     public String getUsername()
     {
@@ -108,5 +120,23 @@ public class User
     public void setId( int id )
     {
         this.id = id;
+    }
+
+    /**
+     * Method used to return values of User object as ArrayList for use as parameters for queries
+     * @param id include id or not
+     * @return  returns the User object constructed as parameter
+     */
+    public ArrayList<String> getUserParameters(boolean id){
+        ArrayList<String> temp = new ArrayList<>();
+        if(id) temp.add(this.id+"");
+        temp.add(username);
+        temp.add(passwordHash);
+        temp.add(fname);
+        temp.add(lname);
+        temp.add(age+"");
+        temp.add(role+"");
+
+        return temp;
     }
 }

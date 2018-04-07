@@ -1,0 +1,7 @@
+April 7th:
+    -Moved a copy of MySQLDatabase to Controllers package
+    -added additional User class constructor with truncated parameters
+    -added additional User class method that parses the attributes to an arraylist
+        -this way they can be used as parameters in db calls.
+    -added BookController and UserControllers
+        -todo: book controller and certain elements of user controllers
