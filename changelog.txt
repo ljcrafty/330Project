@@ -1,0 +1,4 @@
+April 7th:
+    -Moved a copy of MySQLDatabase to Controllers package
+    -added additional User class constructor with truncated parameters
+    -added BookController and UserControllers
