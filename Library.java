@@ -1,5 +1,58 @@
 import java.util.*;
 
+/**
+    SOME USEFUL QUERIES:
+    - Getting all data about a book:
+        SELECT book_id, isbn, title, release_date, num_copies, authors.first_name, 
+            authors.last_name, genres.name, genres.description 
+        FROM book_details 
+            JOIN authors USING (author_id) 
+            JOIN genres USING (genre_id)
+    
+    - Getting all data about a loan:
+        SELECT book_details.book_id, isbn, title, release_date, num_copies, authors.first_name, 
+            authors.last_name, genres.name, genres.description, book_copies.copy_id, 
+            loans.user_id, loans.due_date, users.user_id, username, users.first_name, users.last_name, age
+        FROM loans 
+            JOIN users USING (user_id)
+            JOIN book_copies USING (copy_id, book_id)
+            JOIN book_details USING (book_id)
+            JOIN authors USING (author_id) 
+            JOIN genres USING (genre_id)
+
+    - Getting all data about a reservation:
+        SELECT book_details.book_id, isbn, title, release_date, num_copies, authors.first_name, 
+            authors.last_name, genres.name, genres.description, reservations.user_id, 
+            reservations.date_reserved, users.user_id, username, users.first_name, users.last_name, age
+        FROM reservations
+            JOIN users USING (user_id)
+            JOIN book_details USING (book_id)
+            JOIN authors USING (author_id) 
+            JOIN genres USING (genre_id)
+    
+    - Getting all of a user's information:
+        SELECT users.user_id, username, first_name, last_name, age, password, roles.role_id, roles.name,
+            roles.description, loans.book_id, loans.copy_id, loans.due_date, reservations.book_id,
+            reservations.date_reserved
+        FROM users
+            JOIN user_role USING (user_id)
+            JOIN roles USING (role_id)
+            JOIN loans USING (user_id)
+            JOIN reservations USING (user_id)
+    
+    - Get all overdue loans:
+        SELECT users.user_id, username, users.first_name, users.last_name, book_details.book_id, isbn,
+            title, authors.first_name, authors.last_name, genres.name, genres.description,
+            book_copies.copy_id, due_date
+        FROM loans
+            JOIN users USING (user_id)
+            JOIN book_copies USING (book_id, copy_id)
+            JOIN book_details USING (book_id)
+            JOIN authors USING (author_id)
+            JOIN genres USING (genre_id)
+        WHERE due_date < CURDATE()
+ */
+
 //takes care of the data side of actions performed in the library
 public class Library
 {
@@ -39,7 +92,7 @@ public class Library
             
             //books
             String query = "SELECT book_id, isbn, title, release_date, num_copies, authors.first_name, " + 
-                "authors.last_name, genres.name, genres.description FROM books JOIN authors USING " + 
+                "authors.last_name, genres.name, genres.description FROM book_details JOIN authors USING " + 
                 "(author_id) JOIN genres USING (genre_id)";
             ArrayList<String> params = new ArrayList<String>();
 
@@ -67,7 +120,7 @@ public class Library
             }
 
             //loans and reservations
-            query = "SELECT book_id, user_id, reserved, due_date FROM borrowed_book";
+            query = "SELECT book_id, user_id, reserved, due_date FROM loans";
             
             data = db.getData( query, params );
 
@@ -195,7 +248,7 @@ public class Library
                 return false;
             }
 
-            String query = "INSERT INTO borrowed_book VALUES( ?, ?, false, ? )";
+            String query = "INSERT INTO loans VALUES( ?, ?, false, ? )";
             ArrayList<String> params = new ArrayList<String>();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             params.add( Integer.toString(book.getId()) );
@@ -232,7 +285,7 @@ public class Library
                 return false;
             }
 
-            String query = "INSERT INTO borrowed_book SET book_id = ?, user_id = ?, reserved = true ";
+            String query = "INSERT INTO reservations SET book_id = ?, user_id = ?, reserved = true ";
             ArrayList<String> params = new ArrayList<String>();
             params.add( Integer.toString(book.getId()) );
             params.add( Integer.toString(id) );
@@ -258,7 +311,7 @@ public class Library
     {
         if( !this.loans.containsKey( (Integer) id ) )
         {
-            String query = "DELETE FROM borrowed_book WHERE user_id = ? AND book_id = ?";
+            String query = "DELETE FROM loans WHERE user_id = ? AND book_id = ?";
             ArrayList<String> params = new ArrayList<String>();
             params.add( Integer.toString(id) );
             params.add( Integer.toString(book.getId()) );
@@ -296,7 +349,7 @@ public class Library
     {
         if( !this.reservations.containsKey( (Integer) id ) )
         {
-            String query = "DELETE FROM borrowed_book WHERE user_id = ? AND book_id = ?";
+            String query = "DELETE FROM reservations WHERE user_id = ? AND book_id = ?";
             ArrayList<String> params = new ArrayList<String>();
             params.add( Integer.toString(id) );
             params.add( Integer.toString(book.getId()) );
