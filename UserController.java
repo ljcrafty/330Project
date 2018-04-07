@@ -3,13 +3,15 @@ package Controllers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+
 public class UserController {
 
 
     //key = token
     //value = privilege level
     private HashMap<String,Integer> loggedUsers;
-    private DatabaseController dbController;
+    private Controllers.DatabaseController dbController;
 
     // PUBLIC METHODS
 
