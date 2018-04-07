@@ -1,12 +1,12 @@
-CREATE DATABASE Library;
 USE Library;
 
-DROP TABLE IF EXISTS priv_role;
+DROP TABLE IF EXISTS reservations;
 DROP TABLE IF EXISTS user_role;
-DROP TABLE IF EXISTS borrowed_book;
+DROP TABLE IF EXISTS loans;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS book_copies;
+DROP TABLE IF EXISTS book_details;
 DROP TABLE IF EXISTS authors;
 DROP TABLE IF EXISTS genres;
 
@@ -27,6 +27,14 @@ CREATE TABLE users(
     CONSTRAINT pk_users PRIMARY KEY(user_id)
 );
 
+CREATE TABLE user_role(
+    user_id int,
+    role_id int,
+    CONSTRAINT pk_user_role PRIMARY KEY(role_id, user_id),
+    CONSTRAINT fk_users_roles FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT fk_roles_users FOREIGN KEY (role_id) REFERENCES roles(role_id)
+);
+
 CREATE TABLE authors(
     author_id int,
     first_name varchar(50),
@@ -41,7 +49,7 @@ CREATE TABLE genres(
     CONSTRAINT pk_genres PRIMARY KEY(genre_id)
 );
 
-CREATE TABLE books(
+CREATE TABLE book_details(
     book_id int,
     isbn int(13),
     title varchar(255),
@@ -49,25 +57,33 @@ CREATE TABLE books(
     num_copies int,
     author_id int,
     genre_id int,
-    CONSTRAINT pk_books PRIMARY KEY(book_id),
+    CONSTRAINT pk_book_details PRIMARY KEY(book_id),
     CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors(author_id),
     CONSTRAINT fk_genre FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
 );
 
-CREATE TABLE user_role(
-    user_id int,
-    role_id int,
-    CONSTRAINT pk_user_role PRIMARY KEY(role_id, user_id),
-    CONSTRAINT fk_users_roles FOREIGN KEY (user_id) REFERENCES users(user_id),
-    CONSTRAINT fk_roles_users FOREIGN KEY (role_id) REFERENCES roles(role_id)
+CREATE TABLE book_copies(
+    book_id int,
+    copy_id int,
+    CONSTRAINT pk_book_copies PRIMARY KEY (book_id, copy_id),
+    CONSTRAINT fk_book_details FOREIGN KEY (book_id) REFERENCES book_details(book_id)
 );
 
-CREATE TABLE borrowed_book(
+CREATE TABLE loans(
+    book_id int,
+    copy_id int,
+    user_id int,
+    due_date date,
+    CONSTRAINT pk_loans PRIMARY KEY (copy_id, user_id),
+    CONSTRAINT fk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT fk_book_copies FOREIGN KEY (book_id, copy_id) REFERENCES book_copies(book_id, copy_id)
+);
+
+CREATE TABLE reservations(
     book_id int,
     user_id int,
-    reserved boolean,
-    due_date date NULL,
-    CONSTRAINT pk_borrowed_book PRIMARY KEY(book_id, user_id),
-    CONSTRAINT fk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
-    CONSTRAINT fk_books FOREIGN KEY (book_id) REFERENCES books(book_id)
+    date_reserved date,
+    CONSTRAINT pk_reservations PRIMARY KEY(book_id, user_id),
+    CONSTRAINT fk_user_reservations FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT fk_book_details_reservations FOREIGN KEY (book_id) REFERENCES book_details(book_id)
 );
