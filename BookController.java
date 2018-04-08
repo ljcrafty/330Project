@@ -44,6 +44,27 @@ public class BookController {
 
     }
 
+    public ArrayList<Object[]> getAllLoanDetails(){
+
+        return null;
+    }
+
+    public Object[] getLoanDetail(Book book,int userId){
+
+        return null;
+    }
+
+    public ArrayList<Object[]> getAllReservations(){
+
+        return null;
+    }
+
+    public ArrayList<Object[]> getReservationDetail(BookDetails details,int userId)
+    {
+
+        return null;
+    }
+
 
     /**
      * Method used to loan books
