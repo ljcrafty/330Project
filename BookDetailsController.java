@@ -51,6 +51,8 @@ public class BookDetailsController {
         return null;
     }
 
+
+
     public boolean addABook(BookDetails bookDetails,int authorId,int genreId){
         String query = "INSERT INTO book_details(isbn,title,release_date,num_copies,author_id,genre_id)"+
                  "VALUES(?,?,?,?,?,?)";

@@ -11,3 +11,4 @@ April 7th:  (mateo)
 April 8th:  (mateo)
     Finished book_detail controller
     Modified Book class
+        -todo: BookController write getAllLoans, getLoan, getAllReservations, getAReservation,
