@@ -1,4 +1,4 @@
-April 7th:
+April 7th:  (mateo)
     -Moved a copy of MySQLDatabase to Controllers package
     -added additional User class constructor with truncated parameters
     -added additional User class method that parses the attributes to an arraylist
@@ -7,3 +7,7 @@ April 7th:
         -todo: book controller and certain elements of user controllers
         -todo: finish book_detail controller
         -todo: figure out a way for controllers to inject themselves where needed
+
+April 8th:  (mateo)
+    Finished book_detail controller
+    Modified Book class

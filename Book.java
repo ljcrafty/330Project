@@ -5,11 +5,9 @@ public class Book
     private String title, author_fname, author_lname, genre_name, genre_desc;
     private int id, isbn;
     private Calendar release_date, due_date;
-    private boolean detail;
 
     public Book()
     {
-        detail = false;
         this.title          = "";
         this.author_fname   = "";
         this.author_lname   = "";
@@ -24,7 +22,6 @@ public class Book
     public Book( String title, String author_fname, String author_lname, String genre_name, 
         String genre_desc,int id, int isbn, Calendar release_date )
     {
-        detail = true;
         this.title = title;
         this.author_fname = author_fname;
         this.author_lname = author_lname;
@@ -36,10 +33,8 @@ public class Book
         this.due_date = null;
     }
 
-    public Book( ArrayList<String> vals, boolean isDetail )
+    public Book( ArrayList<String> vals)
     {
-        this.detail = isDetail;
-
         Calendar temp = Calendar.getInstance();
         String date = vals.get(3).split( " " )[0];
         int yr = Integer.parseInt( date.split("-")[0] );
@@ -55,6 +50,19 @@ public class Book
         this.id = Integer.parseInt( vals.get(0) );
         this.isbn = Integer.parseInt( vals.get(1) );
         this.release_date = temp;
+        this.due_date = null;
+    }
+
+
+    public Book(int id,BookDetails bookDetails, Author author, Genre genre){
+        this.title = bookDetails.getTitle();
+        this.author_fname = author.getfName();
+        this.author_lname = author.getlName();
+        this.genre_name = genre.getName();
+        this.genre_desc = genre.getDescription();
+        this.id = id;
+        this.isbn = bookDetails.getIsbn();
+        this.release_date = bookDetails.getReleaseDate();
         this.due_date = null;
     }
 
@@ -84,11 +92,6 @@ public class Book
         return this.genre_desc;
     }
 
-    public int getNumCopies()
-    {
-        return this.num_copies;
-    }
-
     public int getId()
     {
         return this.id;
@@ -107,10 +110,6 @@ public class Book
     public Calendar getDueDate()
     {
         return this.due_date;
-    }
-
-    public boolean isDetail() {
-        return detail;
     }
 
     //setters
@@ -137,11 +136,6 @@ public class Book
     public void setGenreDesc( String desc )
     {
         this.genre_desc = desc;
-    }
-
-    public void setNumCopies( int num )
-    {
-        this.num_copies = num;
     }
 
     public void setId( int id )
@@ -173,9 +167,6 @@ public class Book
         temp.set( yr, mo, day );
 
         this.due_date = temp;
-    }
-    public void setDetail(boolean detail) {
-        this.detail = detail;
     }
 
     public ArrayList<String> getBookParameter(){
