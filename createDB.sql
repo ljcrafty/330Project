@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS Library;
+CREATE DATABASE Library;
+
 USE Library;
 
 DROP TABLE IF EXISTS reservations;
@@ -23,7 +26,7 @@ CREATE TABLE users(
     password varchar(64),
     first_name varchar(50),
     last_name varchar(50),
-    age int,
+    date_of_birth date,
     CONSTRAINT pk_users PRIMARY KEY(user_id)
 );
 
