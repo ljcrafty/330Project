@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 
 public class LoginView extends JPanel {
 
@@ -7,6 +8,7 @@ public class LoginView extends JPanel {
 
     public LoginView() {
         super(new GridLayout(3,2, 5, 8));
+        getPanel();
     }
 
     public JPanel getPanel() {
@@ -23,7 +25,22 @@ public class LoginView extends JPanel {
         JButton registerButton = new JButton("Sign Up");
 
         loginButton.setPreferredSize(new Dimension(40, 35));
+        ArrayList<String> command = new ArrayList<String>();
+        command.add("login");
+        HashMap<String, JTextField> fields = new HashMap<String, JTextField>();
+        fields.put("username", username);
+        fields.put("password", password);
+        
+        loginButton.addActionListener( new Listener( command, fields ) );
+        
         registerButton.setPreferredSize(new Dimension(40, 35));
+        command = new ArrayList<String>();
+        command.add("register");
+        fields = new HashMap<String, JTextField>();
+        fields.put("username", username);
+        fields.put("password", password);
+        
+        registerButton.addActionListener( new Listener( command, fields ) );
 
         add(user);
         add(username);
