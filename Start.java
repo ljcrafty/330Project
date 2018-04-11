@@ -6,7 +6,8 @@ public class Start
    public static void main(String args[])
    {
       JFrame frame = new JFrame();
-      LoginView lv = new LoginView();
+      //LoginView lv = new LoginView();
+      MainView lv = new MainView("librarian");
       
       frame.setLayout(new BorderLayout());
       frame.add(lv, BorderLayout.CENTER);

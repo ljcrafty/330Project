@@ -21,6 +21,41 @@ public class Listener implements ActionListener
             //login mumbo jumbo
             break;
          
+         case "register":
+            //register mumbo jumbo
+            break;
+         
+         case " My Profile":
+            break;
+            
+         case " Search By Author":
+            break;
+            
+         case " Search By Title":
+            break;
+         
+         case " Search By Genre":
+            break;
+         
+         case " Borrowed Books":
+            break;
+         
+         case " Reserved Books":
+            break;
+         
+         case " Search for a User":
+            break;
+         
+         case " Check Overdue Loans":
+            break;
+         
+         case " Add a Book":
+            break;
+         
+         case " Add a User":
+            break;
+         
+         
          default:
             break;
       }
