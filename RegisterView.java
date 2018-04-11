@@ -25,11 +25,22 @@ public class RegisterView extends JPanel
        JTextField f_name = new JTextField(10);
 
        JLabel lname = new JLabel("Last Name:");
-       JPasswordField l_name = new JPasswordField(10);
+       JTextField l_name = new JTextField(10);
+
+       JLabel dob = new JLabel("Date of Birth:");
+       JLabel date = new JLabel("Day:");
+       JTextField day = new JTextField(10);
+
+       JLabel mo = new JLabel("Month:");
+       JTextField month = new JTextField(10);
+       
+       JLabel yr = new JLabel("Year:");
+       JTextField year = new JTextField(10);
 
        JButton cancelButton = new JButton("Cancel");
        JButton regButton = new JButton("Register");
 
+       //setup cancel button
        cancelButton.setPreferredSize(new Dimension(40, 35));
        ArrayList<String> command = new ArrayList<String>();
        command.add("start");
@@ -37,6 +48,7 @@ public class RegisterView extends JPanel
         
        cancelButton.addActionListener( new Listener( command, fields ) );
         
+       //setup register button
        regButton.setPreferredSize(new Dimension(40, 35));
        command = new ArrayList<String>();
        command.add("register with data");
@@ -45,9 +57,26 @@ public class RegisterView extends JPanel
        fields.put("password", password);
        fields.put("fname", f_name);
        fields.put("lname", l_name);
+       fields.put("day", day);
+       fields.put("month", month);
+       fields.put("year", year);
         
        regButton.addActionListener( new Listener( command, fields ) );
 
+       //setup DOB panel
+       JPanel dobPanel = new JPanel( new GridLayout(4, 1) );
+       dobPanel.add(dob);
+       dobPanel.add(date);
+       dobPanel.add(mo);
+       dobPanel.add(yr);
+       
+       JPanel dobFieldPanel = new JPanel( new GridLayout(4, 1) );
+       dobFieldPanel.add( new JLabel() );
+       dobFieldPanel.add(day);
+       dobFieldPanel.add(month);
+       dobFieldPanel.add(year);
+
+       //add the components
        add(user);
        add(username);
 
@@ -59,6 +88,9 @@ public class RegisterView extends JPanel
 
        add(lname);
        add(l_name);
+       
+       add(dobPanel);
+       add(dobFieldPanel);
 
        add(cancelButton);
        add(regButton);

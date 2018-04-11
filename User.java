@@ -144,7 +144,7 @@ public class User
         temp.add(passwordHash);
         temp.add(fname);
         temp.add(lname);
-        temp.add( format.format(date_of_birth) );
+        temp.add( format.format(date_of_birth.getTime()) );
         temp.add(role+"");
 
         return temp;

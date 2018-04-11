@@ -3,7 +3,8 @@ import java.awt.*;
 
 public class View extends JFrame {
 
-    public View() {
+    public View() 
+    {
         super("Library Companion App");
 
         JPanel jp = new JPanel();

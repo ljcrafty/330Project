@@ -21,41 +21,15 @@ public class Listener implements ActionListener
       switch( command.get(0) )
       {
          case "login":
-            //check credentials
-            String username = fields.get("username").getText();
-            String pass = fields.get("password").getText();
-            String token = uc.login( username, pass );
-            
-            //credentials were good, log them in
-            if( !token.equals("no user") && !token.equals("invalid password") )
-            {
-               //gets the frame so we can close it or change it or whatever
-               Component component = (Component) e.getSource();
-               JPanel jp = (JPanel) component.getParent().getParent();
-               CardLayout cards = (CardLayout) jp.getLayout();
-               //TODO: need to be able to check privilege level before changing
-               cards.show(jp, "");
-            }
-            else //failed login, give error
-            {
-               //gets the frame so we can close it or change it or whatever
-               JFrame frame = new JFrame();
-               
-               JOptionPane.showMessageDialog(frame,
-                  "Invalid credentials",
-                  "Login error",
-                  JOptionPane.ERROR_MESSAGE);
-            }
-            
+            login(e);            
             break;
          
          case "register":
-            //gets the frame so we can close it or change it or whatever
-            Component component = (Component) e.getSource();
-            JPanel jp = (JPanel) component.getParent().getParent();
-            CardLayout cards = (CardLayout) jp.getLayout();
+            show("register", e);
+            break;
             
-            cards.show(jp, "register");
+         case "register with data":
+            register(e);            
             break;
          
          case " My Profile":
@@ -88,9 +62,108 @@ public class Listener implements ActionListener
          case " Add a User":
             break;
          
+         case "start":
+            show("login", e);
+            break;
          
          default:
             break;
+      }//end switch
+   }//end actionPerformed
+   
+   private void show(String name, ActionEvent e)
+   {
+      //gets the frame so we can close it or change it or whatever
+      Component component = (Component) e.getSource();
+      JPanel jp = (JPanel) component.getParent().getParent();
+      CardLayout cards = (CardLayout) jp.getLayout();
+      cards.show(jp, name);
+   }
+   
+   private void login(ActionEvent e)
+   {
+      //check credentials
+      String username = fields.get("username").getText();
+      String pass = fields.get("password").getText();
+      String token = uc.login( username, pass );
+      
+      //credentials were good, log them in
+      if( !token.equals("no user") && !token.equals("invalid password") )
+      {
+         //TODO: need to be able to check privilege level before changing
+         show("", e);
+      }
+      else //failed login, give error
+      {
+         JFrame frame = new JFrame();
+         
+         JOptionPane.showMessageDialog(frame,
+            "Invalid credentials",
+            "Login error",
+            JOptionPane.ERROR_MESSAGE);
       }
    }
-}
+
+   private void register(ActionEvent e)
+   {
+      //get data
+      String error = "";
+      String user = fields.get("username").getText();
+      String pass = fields.get("password").getText();
+      String fname = fields.get("fname").getText();
+      String lname = fields.get("lname").getText();
+      String d = fields.get("day").getText(), 
+         m = fields.get("month").getText(), 
+         y = fields.get("year").getText();
+      Calendar dob = Calendar.getInstance();
+      
+      //validate date
+      //TODO: validate better
+      if( !d.equals("") && !m.equals("") && !y.equals("") )
+      {
+         int day = Integer.parseInt(d);
+         int mo = Integer.parseInt(m);
+         int yr = Integer.parseInt(y);
+         dob.set(yr, mo, day);
+      }
+      else
+         error += "date of birth\n";
+
+      //validate other
+      error += (user.equals("")? "username\n" : "");
+      error += (pass.equals("")? "password\n" : "");
+      error += (fname.equals("")? "first name\n" : "");
+      error += (lname.equals("")? "last name\n" : "");
+      
+      //show errors
+      if( !error.equals("") )
+      {
+         JFrame frame = new JFrame();
+         
+         JOptionPane.showMessageDialog(frame,
+            "Invalid input. Please fix the following fields:\n" + error,
+            "Invalid input",
+            JOptionPane.ERROR_MESSAGE);
+      }
+      else
+      {
+         //make user
+         User temp = new User(user, pass, fname, lname, 1, dob, 1);
+      
+         //try to add user
+         if( uc.addUser(temp) )
+         {
+            show("login", e);
+         }
+         else
+         {
+            JFrame frame = new JFrame();
+         
+            JOptionPane.showMessageDialog(frame,
+               "Cannot add data",
+               "Creation error",
+               JOptionPane.ERROR_MESSAGE);
+         }
+      }
+   }
+}//end class

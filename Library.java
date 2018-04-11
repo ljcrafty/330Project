@@ -253,7 +253,7 @@ public class Library
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             params.add( Integer.toString(book.getId()) );
             params.add( Integer.toString(id) );
-            params.add( format.format(Calendar.getInstance().add( Calendar.DATE, 7 )) );//books are due a week from loan
+            params.add( format.format(Calendar.getInstance().add( Calendar.DATE, 7 ).getTime()) );//books are due a week from loan
 
             if( db.setData( query, params ) )
             {
