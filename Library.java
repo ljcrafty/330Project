@@ -108,7 +108,7 @@ public class Library
 
             //users
             query = "SELECT user_id, username, password, first_name, last_name, " + 
-                "age, role_id FROM users JOIN user_role USING (user_id)";
+                "date_of_birth, role_id FROM users JOIN user_role USING (user_id)";
 
             data = db.getData( query, params );
 

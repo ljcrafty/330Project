@@ -99,7 +99,7 @@ public class UserController {
         /**
          * query = "SELECT user_id, username, password, first_name, last_name, age, role_id FROM users JOIN user_role USING (user_id)";
          */
-        String query = "INSERT INTO users(username,password,first_name,last_name,age,role_id) VALUES (?,?,?,?,?,?);";
+        String query = "INSERT INTO users(username,password,first_name,last_name,date_of_birth,role_id) VALUES (?,?,?,?,?,?);";
         boolean check = dbController.setData(query,user.getUserParameters(false));              //not sure if user ID is autoincremented or not.
 
         return check;

@@ -4,7 +4,7 @@ import java.util.*;
 
 public class LoginView extends JPanel {
 
-    private String eMail, username, password;
+    private String username, password;
 
     public LoginView() {
         super(new GridLayout(3,2, 5, 8));
@@ -37,8 +37,6 @@ public class LoginView extends JPanel {
         command = new ArrayList<String>();
         command.add("register");
         fields = new HashMap<String, JTextField>();
-        fields.put("username", username);
-        fields.put("password", password);
         
         registerButton.addActionListener( new Listener( command, fields ) );
 
@@ -55,5 +53,4 @@ public class LoginView extends JPanel {
         setPreferredSize(new Dimension(500, 200));
         return this;
     }
-
 }

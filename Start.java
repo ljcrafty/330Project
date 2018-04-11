@@ -10,6 +10,7 @@ public class Start
       LoginView lv = new LoginView();
       MainView libMain = new MainView("librarian");
       MainView usrMain = new MainView("user");
+      RegisterView rv = new RegisterView();
       
       //configure card layout
       CardLayout cards = new CardLayout(5, 5);      
@@ -17,6 +18,7 @@ public class Start
       jp.add(lv, "login");
       jp.add(libMain, "librarianMain");
       jp.add(usrMain, "userMain");
+      jp.add(rv, "register");
       
       cards.show(jp, "login");
       frame.setContentPane(jp);

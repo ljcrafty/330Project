@@ -1,9 +1,11 @@
-import java.util.ArrayList;
+import java.util.*;
+import java.text.SimpleDateFormat;
 
 public class User
 {
     private String username, passwordHash, fname, lname;
-    private int age, id, role;
+    private int id, role;
+    private Calendar date_of_birth;
 
     public User()
     {
@@ -12,29 +14,35 @@ public class User
         this.fname = "";
         this.lname = "";
         this.role = 0;
-        this.age = 0;
+        this.date_of_birth = Calendar.getInstance();
         this.id = 0;
     }
 
-    public User( String username, String pass, String fname, String lname, int role, int age, int id )
+    public User( String username, String pass, String fname, String lname, int role, 
+        Calendar date, int id )
     {
         this.username = username;
         this.passwordHash = pass;
         this.fname = fname;
         this.lname = lname;
         this.role = role;
-        this.age = age;
+        this.date_of_birth = date;
         this.id = id;
     }
 
     public User( ArrayList<String> vals )
     {
+        int yr = Integer.parseInt(vals.get(5).split("-")[0]), 
+            mo = Integer.parseInt(vals.get(5).split("-")[1]), 
+            day = Integer.parseInt(vals.get(5).split("-")[2]);
+
         this.username = vals.get(1);
         this.passwordHash = vals.get(2);
         this.fname = vals.get(3);
         this.lname = vals.get(4);
         this.role = Integer.parseInt( vals.get(6) );
-        this.age = Integer.parseInt( vals.get(5) );
+        this.date_of_birth = Calendar.getInstance();
+        this.date_of_birth.set( yr, mo, day );
         this.id = Integer.parseInt( vals.get(0) );
     }
 
@@ -76,9 +84,9 @@ public class User
         return this.role;
     }
 
-    public int getAge()
+    public Calendar getDOB()
     {
-        return this.age;
+        return this.date_of_birth;
     }
 
     public int getId()
@@ -112,9 +120,9 @@ public class User
         this.role = role;
     }
 
-    public void setAge( int age )
+    public void setDOB( Calendar date )
     {
-        this.age = age;
+        this.date_of_birth = date;
     }
 
     public void setId( int id )
@@ -129,12 +137,14 @@ public class User
      */
     public ArrayList<String> getUserParameters(boolean id){
         ArrayList<String> temp = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
         if(id) temp.add(this.id+"");
         temp.add(username);
         temp.add(passwordHash);
         temp.add(fname);
         temp.add(lname);
-        temp.add(age+"");
+        temp.add( format.format(date_of_birth) );
         temp.add(role+"");
 
         return temp;

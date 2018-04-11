@@ -31,7 +31,7 @@ public class Listener implements ActionListener
             {
                //gets the frame so we can close it or change it or whatever
                Component component = (Component) e.getSource();
-               JPanel jp = (JPanel) component.getParent();
+               JPanel jp = (JPanel) component.getParent().getParent();
                CardLayout cards = (CardLayout) jp.getLayout();
                //TODO: need to be able to check privilege level before changing
                cards.show(jp, "");
@@ -52,10 +52,10 @@ public class Listener implements ActionListener
          case "register":
             //gets the frame so we can close it or change it or whatever
             Component component = (Component) e.getSource();
-            JFrame frame = (JFrame) SwingUtilities.getRoot(component);
+            JPanel jp = (JPanel) component.getParent().getParent();
+            CardLayout cards = (CardLayout) jp.getLayout();
             
-            //collect username and password from fields and insert them into
-            //register view
+            cards.show(jp, "register");
             break;
          
          case " My Profile":
