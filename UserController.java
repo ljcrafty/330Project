@@ -10,6 +10,13 @@ public class UserController {
     //value = privilege level
     private HashMap<String,Integer> loggedUsers;
     private MySQLDatabase dbController;
+    
+    public UserController()
+    {
+         this.dbController = new MySQLDatabase("mysql", "3306", "localhost",
+            "Library", "library", "V3ry5ecretC0de");
+         this.loggedUsers = new HashMap<String, Integer>();
+    }
 
     // PUBLIC METHODS
 
@@ -34,7 +41,7 @@ public class UserController {
 
         else{
             User temp = new User(data.get(0).get(0),data.get(0).get(1), data.get(0).get(2));
-            if(org.mindrot.jbcrypt.BCrypt.checkpw(password,temp.getPasswordHash())){
+            if(BCrypt.checkpw(password,temp.getPasswordHash())){
                 //TODO: find something similar to JWT
                 return "token_placeholder";
             }
@@ -67,7 +74,7 @@ public class UserController {
     public boolean addUser(User newUser){
         String plaintext = newUser.getPasswordHash();
 
-        newUser.setPasswordHash(org.mindrot.jbcrypt.BCrypt.hashpw(plaintext, org.mindrot.jbcrypt.BCrypt.gensalt(12)));
+        newUser.setPasswordHash(BCrypt.hashpw(plaintext, BCrypt.gensalt(12)));
 
         addToDatabase(newUser);
 

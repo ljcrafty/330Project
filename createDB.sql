@@ -3,6 +3,9 @@ CREATE DATABASE Library;
 
 USE Library;
 
+CREATE USER 'library'@'localhost';
+GRANT ALL ON Library.* TO 'library'@'localhost' IDENTIFIED BY 'V3ry5ecretC0de';
+
 DROP TABLE IF EXISTS reservations;
 DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS loans;

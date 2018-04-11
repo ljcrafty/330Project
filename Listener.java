@@ -1,4 +1,5 @@
 import java.awt.event.*;
+import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -6,11 +7,13 @@ public class Listener implements ActionListener
 {
    private ArrayList<String> command;
    private HashMap<String, JTextField> fields;
+   private UserController uc;
 
    public Listener(ArrayList<String> command, HashMap<String, JTextField> fields)
    {
       this.command = command;
       this.fields = fields;
+      this.uc = new UserController();
    }
    
    public void actionPerformed(ActionEvent e)
@@ -18,11 +21,41 @@ public class Listener implements ActionListener
       switch( command.get(0) )
       {
          case "login":
-            //login mumbo jumbo
+            //check credentials
+            String username = fields.get("username").getText();
+            String pass = fields.get("password").getText();
+            String token = uc.login( username, pass );
+            
+            //credentials were good, log them in
+            if( !token.equals("no user") && !token.equals("invalid password") )
+            {
+               //gets the frame so we can close it or change it or whatever
+               Component component = (Component) e.getSource();
+               JPanel jp = (JPanel) component.getParent();
+               CardLayout cards = (CardLayout) jp.getLayout();
+               //TODO: need to be able to check privilege level before changing
+               cards.show(jp, "");
+            }
+            else //failed login, give error
+            {
+               //gets the frame so we can close it or change it or whatever
+               JFrame frame = new JFrame();
+               
+               JOptionPane.showMessageDialog(frame,
+                  "Invalid credentials",
+                  "Login error",
+                  JOptionPane.ERROR_MESSAGE);
+            }
+            
             break;
          
          case "register":
-            //register mumbo jumbo
+            //gets the frame so we can close it or change it or whatever
+            Component component = (Component) e.getSource();
+            JFrame frame = (JFrame) SwingUtilities.getRoot(component);
+            
+            //collect username and password from fields and insert them into
+            //register view
             break;
          
          case " My Profile":
