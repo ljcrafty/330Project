@@ -315,4 +315,51 @@ public class MySQLDatabase
             throw e;
         }
     }
+
+    /**
+        Starts a transaction in the database
+     */
+    public void startTrans() throws DLException
+    {
+        try
+        {
+            this.conn.setAutoCommit( false );
+        }
+        catch( SQLException e )
+        {
+            throw new DLException(e);
+        }
+    }
+
+    /**
+        Finishes a transaction in the database by committing changes and enabling auto-commit
+     */
+    public void endTrans() throws DLException
+    {
+        try
+        {    
+            this.conn.commit();
+            this.conn.setAutoCommit( true );
+        }
+        catch( SQLException e )
+        {
+            throw new DLException(e);
+        }
+    }
+
+    /**
+        Rolls back changes made during the last transaction and enables auto-commit
+     */
+    public void rollbackTrans() throws DLException
+    {
+        try
+        {    
+            this.conn.rollback();
+            this.conn.setAutoCommit( true );
+        }
+        catch( SQLException e )
+        {
+            throw new DLException(e);
+        }
+    }
 }//end class
