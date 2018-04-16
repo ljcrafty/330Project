@@ -2,58 +2,68 @@ package Views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class LoginView extends JPanel {
+public class LoginView implements View {
+    private String title = "Login";
+    private JPanel view = new JPanel();
+    private JTextField password = new JPasswordField(10);
+    private JTextField username = new JTextField(10);
+    private JButton login = new JButton("Login");
+    private JButton register = new JButton("Register");
 
-    private String username, password;
 
-    public LoginView() {
-        super(new GridLayout(3,2, 5, 8));
-        getPanel();
+    public LoginView(){
+        JPanel usernamePanel = new JPanel();
+        usernamePanel.setLayout(new FlowLayout());
+        usernamePanel.add(new Label("Username"));
+        usernamePanel.add(username);
+
+        JPanel passwordPanel = new JPanel();
+        passwordPanel.setLayout(new FlowLayout());
+        passwordPanel.add(new Label("Password"));
+        passwordPanel.add(password);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel.add(login);
+        buttonPanel.add(register);
+
+
+
+        view.setLayout(new GridLayout(0,1));
+        view.add(usernamePanel);
+        view.add(passwordPanel);
+        view.add(buttonPanel);
+
+    }
+    public String getTitle(){
+        return title;
     }
 
-    public JPanel getPanel() {
+    public JPanel getView() {
+        return view;
+    }
 
-        this.setFont(new Font("Roboto Condensed", Font.PLAIN, 12));
+    public void registerListeners(ActionListener listener){
+        login.addActionListener(listener);
+        register.addActionListener(listener);
+    }
 
-        JLabel user = new JLabel("Username:");
-        JTextField username = new JTextField(10);
+    public ArrayList<Object> getListenerObjects(){
+        ArrayList<Object> listeners = new ArrayList<>();
+        listeners.add(login);
+        listeners.add(password);
 
-        JLabel pw = new JLabel("Password:");
-        JPasswordField password = new JPasswordField(10);
+        return listeners;
+    }
 
-        JButton loginButton = new JButton("Log In");
-        JButton registerButton = new JButton("Sign Up");
+    public String[] getData(){
+        return new String[]{username.getText(),password.getText()};
+    }
 
-        loginButton.setPreferredSize(new Dimension(40, 35));
-        ArrayList<String> command = new ArrayList<String>();
-        command.add("login");
-        HashMap<String, JTextField> fields = new HashMap<String, JTextField>();
-        fields.put("username", username);
-        fields.put("password", password);
-        
-        //loginButton.addActionListener( new Listener( command, fields ) );
-        
-        registerButton.setPreferredSize(new Dimension(40, 35));
-        command = new ArrayList<String>();
-        command.add("register");
-        fields = new HashMap<String, JTextField>();
-        
-        //registerButton.addActionListener( new Listener( command, fields ) );
+    public void setData(Object[] models){
 
-        add(user);
-        add(username);
-
-        add(pw);
-        add(password);
-
-        add(loginButton);
-        add(registerButton);
-
-        setVisible(true);
-        setPreferredSize(new Dimension(500, 200));
-        return this;
     }
 }

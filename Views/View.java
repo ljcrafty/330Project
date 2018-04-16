@@ -1,45 +1,46 @@
 package Views;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class View extends JFrame {
+public interface View {
+    String title = "";
+    JPanel view = null;
 
-    public View() 
-    {
-        super("Library Companion App");
+    /**
+     * Method used to create a title
+     * @return
+     */
+    public String getTitle();
 
-        JPanel jp = new JPanel();
-        LoginView lv = new LoginView();
-        MainView libMain = new MainView("librarian");
-        MainView usrMain = new MainView("user");
-        RegisterView rv = new RegisterView();
-      
-        //configure card layout
-        CardLayout cards = new CardLayout(5, 5);      
-        jp.setLayout(cards);
-        jp.add(lv, "login");
-        jp.add(libMain, "librarianMain");
-        jp.add(usrMain, "userMain");
-        jp.add(rv, "register");
-      
-        cards.show(jp, "login");
-        setContentPane(jp);
-        setLocation(500, 125);
-        setSize(600, 500);
-        setVisible(true);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
+    /**
+     * Method used to get the JPanel for insertion into frame
+     * @return
+     */
+    public JPanel getView();
 
-    public void setPanel(JPanel panel) {
-        add(panel);
-        setPreferredSize(panel.getPreferredSize());
-        pack();
-    }
+    /**
+     * Method used to register listeners
+     * @param listener
+     */
+    public void registerListeners(ActionListener listener);
 
-    public void removePanel(JPanel panel) {
-        remove(panel);
-    }
+    /**
+     * Method used to get updated/new listeners
+     * @return
+     */
+    public ArrayList<Object> getListenerObjects();
 
+    /**
+     * Method used to get eventual data
+     * @return
+     */
+    public String[] getData();
+
+    /**
+     * Method used to set the data to model
+     * @param model
+     */
+    public void setData(Object[] model);
 }
