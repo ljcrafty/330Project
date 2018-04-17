@@ -15,7 +15,7 @@ public class MainView extends JPanel {
             case "librarian":
                String[] labelNames = {" My Profile", " Search By Author", 
                   " Search By Title", " Search By Genre", " Search for a User",
-                  " Check Overdue Loans", " Borrowed Books", " Reserved Books", 
+                  " Check Overdue Loans", " My Loaned Books", " My Reservations", 
                   " Add a Book", " Add a User"};
 
                getPanel( labelNames );
@@ -23,8 +23,8 @@ public class MainView extends JPanel {
                
             default:
                String[] labels = {" My Profile", " Search By Author", 
-                  " Search By Title", " Search By Genre", " Borrowed Books", 
-                  " Reserved Books"};
+                  " Search By Title", " Search By Genre", " My Loaned Books", 
+                  " My Reservations"};
             
                getPanel( labels );
                break;

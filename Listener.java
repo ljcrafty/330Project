@@ -2,6 +2,8 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
+import Controllers.*;
+import Models.*;
 
 public class Listener implements ActionListener
 {
@@ -44,10 +46,10 @@ public class Listener implements ActionListener
          case " Search By Genre":
             break;
          
-         case " Borrowed Books":
+         case " My Loaned Books":
             break;
          
-         case " Reserved Books":
+         case " My Reservations":
             break;
          
          case " Search for a User":
@@ -90,8 +92,14 @@ public class Listener implements ActionListener
       //credentials were good, log them in
       if( !token.equals("no user") && !token.equals("invalid password") )
       {
-         //TODO: need to be able to check privilege level before changing
-         show("", e);
+         if( uc.authenticate(token, 1) )
+         {
+            show("librarianMain", e);
+         }
+         else
+         {
+            show("userMain", e);
+         }
       }
       else //failed login, give error
       {

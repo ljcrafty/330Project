@@ -17,14 +17,14 @@ DROP TABLE IF EXISTS authors;
 DROP TABLE IF EXISTS genres;
 
 CREATE TABLE roles(
-    role_id int,
+    role_id int AUTO_INCREMENT,
     name varchar(10),
     description varchar(255),
     CONSTRAINT pk_roles PRIMARY KEY(role_id)
 );
 
 CREATE TABLE users(
-    user_id int,
+    user_id int AUTO_INCREMENT,
     username varchar(30),
     password varchar(64),
     first_name varchar(50),
@@ -42,21 +42,21 @@ CREATE TABLE user_role(
 );
 
 CREATE TABLE authors(
-    author_id int,
+    author_id int AUTO_INCREMENT,
     first_name varchar(50),
     last_name varchar(50),
     CONSTRAINT pk_authors PRIMARY KEY(author_id)
 );
 
 CREATE TABLE genres(
-    genre_id int,
+    genre_id int AUTO_INCREMENT,
     name varchar(50),
     description varchar(255),
     CONSTRAINT pk_genres PRIMARY KEY(genre_id)
 );
 
 CREATE TABLE book_details(
-    book_id int,
+    book_id int AUTO_INCREMENT,
     isbn int(13),
     title varchar(255),
     release_date date,
@@ -93,3 +93,21 @@ CREATE TABLE reservations(
     CONSTRAINT fk_user_reservations FOREIGN KEY (user_id) REFERENCES users(user_id),
     CONSTRAINT fk_book_details_reservations FOREIGN KEY (book_id) REFERENCES book_details(book_id)
 );
+
+INSERT INTO roles 
+    VALUES(1, 'Admin', 'Has access to create, modify, and delete anything in the database');
+INSERT INTO roles 
+    VALUES(2, 'User', 'Has access to create, modify, and delete only data related to themselves');
+
+INSERT INTO users 
+    VALUES(1, 'librarian', '$2a$07$rJNj6GH5X8NHmRGICwF0lea3lY04dwoucIFagSvBkAhlLxwqxsbhe', 'Jane',
+    'Doe', '1990-04-09');
+INSERT INTO users 
+    VALUES(2, 'user', '$2a$07$ho4YlKa4xTiRUriBlQq4u.eRMLSKuOhzj4zHV4jxf1xWNBHvTW9nW', 'John',
+    'Doe', '1980-10-15');
+
+INSERT INTO user_role 
+    VALUES(1, 1);
+INSERT INTO user_role 
+    VALUES(2, 2);
+

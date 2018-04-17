@@ -167,7 +167,7 @@ public class MySQLDatabase
                     returned from the database and their column names if specified, 
                     or null if there was an error.
     */
-    public ArrayList<ArrayList<String>> getData( String query, ArrayList<String> params ) throws DLException
+    public ArrayList<ArrayList<String>> getData( String query, ArrayList<String> params )
     {
         //check that the query is the right type of statement
         String verb = query.split(" ")[0].toLowerCase();

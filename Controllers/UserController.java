@@ -15,6 +15,15 @@ public class UserController {
     
     public UserController(){
             this.dbController = Injector.getDbController();
+            
+            try
+            {
+                this.dbController.connect();
+            }
+            catch( DLException e )
+            {
+                System.out.println("Error connecting to the database");
+            }
 //         this.loggedUsers = new HashMap<String, Integer>();
     }
 
@@ -32,11 +41,8 @@ public class UserController {
         params.add(username);
 
         ArrayList<ArrayList<String>> data = null;
-        try {
-            data = dbController.getData(query,params);
-        } catch (DLException e) {
-            //TODO: log error
-        }
+        data = dbController.getData(query,params);
+        
         if (data == null) return "no user";
 
         else{
@@ -76,9 +82,7 @@ public class UserController {
 
         newUser.setPasswordHash(BCrypt.hashpw(plaintext, BCrypt.gensalt(12)));
 
-        addToDatabase(newUser);
-
-        return false;
+        return addToDatabase(newUser);
     }
 
 
@@ -99,10 +103,34 @@ public class UserController {
         /**
          * query = "SELECT user_id, username, password, first_name, last_name, age, role_id FROM users JOIN user_role USING (user_id)";
          */
-        String query = "INSERT INTO users(username,password,first_name,last_name,date_of_birth,role_id) VALUES (?,?,?,?,?,?);";
-        boolean check = dbController.setData(query,user.getUserParameters(false));              //not sure if user ID is autoincremented or not.
+        //get next id and set it
+        String query = "SELECT MAX(user_id) FROM users";
+        ArrayList<ArrayList<String>> data = dbController.getData(query, new ArrayList<String>());
+        
+        if( data == null )
+        {
+            System.out.println("no data");
+            return false;
+        }
 
-        return check;
+        user.setId( Integer.parseInt(data.get(0).get(0)) + 1 );
+
+        query = "INSERT INTO users(user_id,username,password,first_name,last_name,date_of_birth) VALUES (?,?,?,?,?,?);";
+        boolean check = dbController.setData(query, user.getUserParameters(true));
+
+        if( check )
+        {
+            query = "INSERT INTO user_role(user_id,role_id) VALUES (?,?);";
+            ArrayList<String> params = new ArrayList<String>();
+            params.add(user.getId() + "");
+            params.add(user.getRole() + "");
+
+            check = dbController.setData(query, params);
+
+            return check;
+        }
+
+        return false;
     }
 
 
