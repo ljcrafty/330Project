@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class MainContainer {
-    private JFrame frame;
+public class MainContainer extends JFrame {
+
     private Container root;
     private View currentView;
 
@@ -17,8 +17,8 @@ public class MainContainer {
 
 
     public MainContainer(){
-        frame = new JFrame();
-        root = frame.getContentPane();
+        super();
+        root = this.getContentPane();
     }
 
     public void addView(View view){
@@ -31,15 +31,15 @@ public class MainContainer {
         }
 
 
-        frame.add(view.getView());
-        frame.setTitle(view.getTitle());
-        frame.pack();
-        frame.setVisible(true);
+        this.add(view.getView());
+        this.setTitle(view.getTitle());
+        this.pack();
+        this.setVisible(true);
         System.out.println("");
     }
 
     public void showMessage(String message){
-        JOptionPane.showMessageDialog(frame,message);
+        JOptionPane.showMessageDialog(this,message);
     }
 
     public String[] getData(){
