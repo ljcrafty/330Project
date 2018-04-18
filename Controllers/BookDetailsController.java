@@ -18,7 +18,6 @@ public class BookDetailsController {
                 "JOIN authors USING (author_id)"+
                 "JOIN genres USING (genre_id)";
 
-        try {
             ArrayList<ArrayList<String>> result = dbController.getData(query,new ArrayList<String>());
             ArrayList<BookDetails> detailsResult = new ArrayList<>();
 
@@ -27,11 +26,7 @@ public class BookDetailsController {
             }
 
             return detailsResult;
-        } catch (DLException e) {
-            //TODO: handle this
-        }
 
-        return null;
     }
 
     public BookDetails getABook(int id){
@@ -45,16 +40,11 @@ public class BookDetailsController {
         ArrayList<String> params = new ArrayList<>();
         params.add(id+"");
 
-        try {
+
             ArrayList<ArrayList<String>> result = dbController.getData(query,params);
 
             return new BookDetails(result.get(0));
 
-        } catch (DLException e) {
-            //TODO: handle this
-        }
-
-        return null;
     }
 
 

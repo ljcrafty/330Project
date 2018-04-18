@@ -16,7 +16,7 @@ public class AuthorController {
 
         ArrayList<String> params = new ArrayList<>();
 
-        try {
+
             ArrayList<ArrayList<String>> authorResults = dbController.getData(query,params);
 
             ArrayList<Author> results = new ArrayList<>();
@@ -25,11 +25,8 @@ public class AuthorController {
             }
 
             return results;
-        } catch (DLException e) {
-            e.printStackTrace();
-        }
 
-        return null;
+
     }
 
     public Author getAuthor(int id){
@@ -38,14 +35,10 @@ public class AuthorController {
         ArrayList<String> params = new ArrayList<>();
         params.add(id+"");
 
-        try {
+
             ArrayList<ArrayList<String>> authorResults = dbController.getData(query,params);
             return new Author(authorResults.get(0));
-        } catch (DLException e) {
-            e.printStackTrace();
-        }
 
-        return null;
     }
 
     public boolean addAuthor(Author author){

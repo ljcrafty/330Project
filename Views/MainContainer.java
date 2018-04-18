@@ -27,7 +27,7 @@ public class MainContainer {
         int numPanels = root.getComponents().length;
 
         if(numPanels > 0){
-            root.remove(1);
+            root.remove(0);
         }
 
 

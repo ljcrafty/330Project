@@ -17,20 +17,15 @@ public class GenreController {
         ArrayList<String> params = new ArrayList<>();
         params.add(id+"");
 
-        try {
+
             ArrayList<ArrayList<String>> genreResults = dbController.getData(query,params);
             return new Genre(genreResults.get(0));
-        } catch (DLException e) {
-            //todo: handle the exceptions
-        }
 
-        return null;
     }
 
     public ArrayList<Genre> getAllGenres(){
         String query = "SELECT genre_id,name,description FROM genre";
 
-        try {
             ArrayList<ArrayList<String>> genreResults = dbController.getData(query,new ArrayList<>());
 
             ArrayList<Genre> results = new ArrayList<>();
@@ -39,11 +34,7 @@ public class GenreController {
             }
 
             return results;
-        } catch (DLException e) {
-            //todo: handle exception
-        }
 
-        return null;
     }
 
     public boolean addGenre(String name, String description){

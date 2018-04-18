@@ -68,7 +68,7 @@ public class BookController {
 
         ArrayList<String> params = new ArrayList<>();
 
-        try {
+
             ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
 
             ArrayList<Loan> loans = new ArrayList<>();
@@ -78,10 +78,6 @@ public class BookController {
             }
             return loans;
 
-        } catch (DLException e) {
-            //TODO catch error
-        }
-        return null;
     }
 
 
@@ -102,13 +98,9 @@ public class BookController {
         params.add(book.getId()+"");
         params.add(userId+"");
 
-        try {
+
             ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
             return new Loan(dbResults.get(0));
-        } catch (DLException e) {
-            //TODO:do this
-        }
-        return null;
     }
 
     public boolean removeLoan(int bookId, int copyId, int userId){
@@ -122,7 +114,7 @@ public class BookController {
         return dbController.setData(query,params);
     }
 
-    public ArrayList<Reservation[]> getAllReservations(){
+    public ArrayList<Reservation> getAllReservations(){
         String query = "SELECT book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
                 "authors.last_name6, genres.name, genres.description, reservations.user_id,"+
                 "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, age"+
@@ -132,18 +124,15 @@ public class BookController {
                 "JOIN authors USING (author_id)"+
                 " JOIN genres USING (genre_id);";
         ArrayList<String> params = new ArrayList<>();
-        try {
+
             ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
 
             ArrayList<Reservation> reservations = new ArrayList<>();
             for(ArrayList<String> dbEntry: dbResults){
                 reservations.add(new Reservation(dbEntry));
             }
-        } catch (DLException e) {
-            //TODO: handle this
-        }
 
-        return null;
+            return reservations;
     }
 
     /**
@@ -168,14 +157,9 @@ public class BookController {
         params.add(details.getBook_id()+"");
         params.add(userId+"");
 
-        try {
             ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
             return new Reservation(dbResults.get(0));
-        } catch (DLException e) {
 
-        }
-
-        return null;
     }
 
 
@@ -274,7 +258,7 @@ public class BookController {
                     "JOIN authors USING (book_details.author_id)"+
                     "JOIN genres USING (book_details.genre_id);";
 
-        try {
+
             ArrayList<ArrayList<String>> results = dbController.getData(query,new ArrayList<String>());
             ArrayList<Book> bookCollection = new ArrayList<>();
 
@@ -283,11 +267,7 @@ public class BookController {
             }
 
             return bookCollection;
-        } catch (DLException e) {
-            e.printStackTrace();
-        }
 
-        return null;
     }
 
 
@@ -305,16 +285,12 @@ public class BookController {
         ArrayList<String> params = new ArrayList<>();
         params.add(id+"");
 
-        try {
+
             ArrayList<ArrayList<String>> results = dbController.getData(query,params);
 
             return new Book(results.get(0));
 
-        } catch (DLException e) {
-            //TODO: handle this
-        }
 
-        return null;
     }
 
 
@@ -346,14 +322,10 @@ public class BookController {
         params.add(book.getISBN()+"");
         params.add(book.getTitle());
 
-        try {
             ArrayList<ArrayList<String>> results = dbController.getData(query,params);
 
             return Integer.parseInt(results.get(0).get(0));
-        } catch (DLException e) {
-            //TODO: handle this
-        }
 
-        return -1;
+
     }
 }
