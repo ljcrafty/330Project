@@ -1,5 +1,6 @@
 package Views;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,8 +19,15 @@ public class ViewTests implements ActionListener {
 
         switch (command){
             case "Login" :{
-                View test = new TestView();
+                View test = new ProfileView(0);
+                test.registerListeners(this);
                 addView(test);
+
+            }break;
+
+
+            default:{
+                JOptionPane.showMessageDialog(null,command);
             }
         }
     }
