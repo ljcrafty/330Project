@@ -16,8 +16,8 @@ public class User
         this.passwordHash = "";
         this.fname = "";
         this.lname = "";
-        this.role = 0;
-        this.date_of_birth = Calendar.getInstance();
+        this.role = 2;
+        this.date_of_birth = null;
         this.id = 0;
     }
 

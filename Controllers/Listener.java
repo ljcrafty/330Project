@@ -26,18 +26,11 @@ public class Listener implements ActionListener
             switch( e.getActionCommand() )
             {
                   case "home":
-                        if( uc.authenticate(token, 1) )
-                        {
-                              show( new MainView("librarian"), e );
-                        }
-                        else
-                        {
-                              show( new MainView("user"), e );
-                        }
+                        home(e);
                         break;
 
                   case "save user":
-                        //show();
+                        saveUser(e);
                         break;
 
                   case "Login":
@@ -74,7 +67,7 @@ public class Listener implements ActionListener
                         break;
                   
                   case " Search for a User":
-                        
+                        //when selecting user from search, just pull data and then send model into view
                         break;
                   
                   case " Check Overdue Loans":
@@ -86,7 +79,9 @@ public class Listener implements ActionListener
                         break;
                   
                   case " Add a User":
-                        
+                        ProfileView temp = new ProfileView( new User() );
+                        temp.setEdit(true);
+                        show( temp, e );
                         break;
                   
                   case "start":
@@ -132,6 +127,61 @@ public class Listener implements ActionListener
             JFrame frame = new JFrame();
             JOptionPane.showMessageDialog(frame,
                   msg, title, JOptionPane.ERROR_MESSAGE);
+      }
+
+      /**
+       * Brings a user to the main page depending on their authorization
+       * @param e the event that triggered the addition
+       */
+      private void home(ActionEvent e)
+      {
+            if( uc.authenticate(token, 1) )
+            {
+                  show( new MainView("librarian"), e );
+            }
+            else
+            {
+                  show( new MainView("user"), e );
+            }
+      }
+
+      /**
+       * Saves a user's data into the database or adds them if necessary
+       * @param e the event that triggered the addition
+       */
+      private void saveUser(ActionEvent e)
+      {
+            String[] userData = this.getMainCont(e).getData();
+            
+            //if the user in getData has an id, it's an update call
+            if( !userData[0].equals("0") )
+            {
+                  User user = uc.getUser( Integer.parseInt(userData[0]) );
+
+                  //TODO: add when update is added to controller
+            }
+            else //otherwise, it's an insert
+            {
+                  String date = userData[7] + "-" + userData[6] + "-" + userData[5];
+                  userData[5] = date;
+                  userData[6] = userData[8];
+                  userData[7] = "";
+                  userData[8] = "";
+                  
+                  java.util.List<String> temp = Arrays.asList(userData);
+                  ArrayList<String> data = new ArrayList<String>();
+                  data.addAll(temp);
+                  User user = new User(data);
+
+                  if( uc.addUser(user) )
+                  {
+                        home(e);
+                  }
+                  else
+                  {
+                        error("There was a problem adding your data", "Database Error");
+                  }
+            }
       }
    
       /**
