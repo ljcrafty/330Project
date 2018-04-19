@@ -50,12 +50,14 @@ public class User
     }
 
     /**
-     * Just fetch username, pw and role from the DB for login check.
+     * Just fetch id, username, pw and role from the DB for login check.
+     * @param id
      * @param username
      * @param hashedPass
      * @param role
      */
-    public User(String username, String hashedPass, String role){
+    public User(int id, String username, String hashedPass, String role){
+        this.id = id;
         this.username = username;
         this.passwordHash = hashedPass;
         this.role = Integer.parseInt(role);

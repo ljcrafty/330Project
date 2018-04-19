@@ -36,20 +36,21 @@ public class UserController {
      * @return returns JWToken on success, "no user" if the username is not found and "invalid password" if the password is wrong.
      */
     public String login(String username, String password){
-        String query = "SELECT username, password, role_id FROM users JOIN user_role USING (user_id) WHERE username = ?";
+        String query = "SELECT user_id, username, password, role_id FROM users JOIN user_role USING (user_id) WHERE username = ?";
         ArrayList<String> params = new ArrayList<>();
         params.add(username);
 
-        ArrayList<ArrayList<String>> data = null;
-        data = dbController.getData(query,params);
+        ArrayList<ArrayList<String>> data = dbController.getData(query,params);
         
-        if (data == null) return "no user";
+        if (data == null || data.size() == 0) return "no user";
 
         else{
-            User temp = new User(data.get(0).get(0),data.get(0).get(1), data.get(0).get(2));
+            User temp = new User(Integer.parseInt(data.get(0).get(0)),
+                data.get(0).get(1), data.get(0).get(2), data.get(0).get(3));
+
             if(BCrypt.checkpw(password,temp.getPasswordHash())){
                 //TODO: find something similar to JWT
-                return "token_placeholder";
+                return data.get(0).get(0);
             }
             else{
                 return "invalid password";
@@ -57,6 +58,25 @@ public class UserController {
         }
 
     }
+
+    public User getUser(int id)
+    {
+        String query = "SELECT user_id, username, password, first_name, last_name, date_of_birth, role_id " + 
+            "FROM users JOIN user_role USING user_id WHERE user_id = ?;";
+
+        ArrayList<String> params = new ArrayList<>();
+        params.add(id+"");
+
+        ArrayList<ArrayList<String>> results = dbController.getData(query,params);
+        
+        if( results != null )
+        {
+            return new User(results.get(0));
+        }
+        
+        return null;
+    }
+
 
     /**
      * Method used to log out
@@ -85,13 +105,12 @@ public class UserController {
         return addToDatabase(newUser);
     }
 
-
-
-    // PRIVATE METHODS
-    private boolean authenticate(String token, int required_privilege){
+    public boolean authenticate(String token, int required_privilege){
         //TODO: find something similar to JWT.
         return false;
     }
+
+    // PRIVATE METHODS
 
     /**
      Adds a user to the Library and database

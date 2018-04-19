@@ -34,7 +34,11 @@ public class MainContainer extends JFrame {
         this.add(view.getView());
         this.setTitle(view.getTitle());
         this.pack();
-        this.setVisible(true);
+        setLocation(500, 125);
+        setSize(600, 500);
+        setVisible(true);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         System.out.println("");
     }
 

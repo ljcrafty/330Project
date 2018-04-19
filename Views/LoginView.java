@@ -30,8 +30,6 @@ public class LoginView implements View {
         buttonPanel.add(login);
         buttonPanel.add(register);
 
-
-
         view.setLayout(new GridLayout(0,1));
         view.add(usernamePanel);
         view.add(passwordPanel);
