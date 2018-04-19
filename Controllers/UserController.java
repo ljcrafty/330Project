@@ -1,8 +1,16 @@
 package Controllers;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import Models.*;
+import com.auth0.*;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 
 public class UserController {
@@ -12,6 +20,7 @@ public class UserController {
     //value = privilege level
     private HashMap<String,Integer> loggedUsers;
     private MySQLDatabase dbController;
+    private String key = "s0m3r4nd0mk3y";
     
     public UserController(){
             this.dbController = Injector.getDbController();
@@ -49,8 +58,22 @@ public class UserController {
                 data.get(0).get(1), data.get(0).get(2), data.get(0).get(3));
 
             if(BCrypt.checkpw(password,temp.getPasswordHash())){
-                //TODO: find something similar to JWT
-                return data.get(0).get(0);
+
+//                return data.get(0).get(0);
+                try {
+                    Algorithm algorithm = Algorithm.HMAC256(key);
+                    String token = JWT.create()
+                            .withIssuer("auth0")
+                            .sign(algorithm);
+
+                    loggedUsers.put(token,temp.getRole());
+
+                    return token;
+                } catch (UnsupportedEncodingException exception){
+                    return "unexpected_err_UTF";
+                } catch (JWTCreationException exception){
+                    return "unexpected_err_creation";
+                }
             }
             else{
                 return "invalid password";
@@ -106,8 +129,25 @@ public class UserController {
     }
 
     public boolean authenticate(String token, int required_privilege){
-        //TODO: find something similar to JWT.
-        return false;
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(key);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("auth0")
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(token);
+        } catch (UnsupportedEncodingException exception){
+            //UTF-8 encoding not supported
+        } catch (JWTVerificationException exception){
+            return false;                                   //token is invalid
+        }
+
+        if(!loggedUsers.containsKey(token)) return false;
+
+        if(loggedUsers.get(token)<required_privilege) return false;
+        else return true;
+
+
     }
 
     // PRIVATE METHODS
