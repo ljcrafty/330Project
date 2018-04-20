@@ -5,12 +5,11 @@ import java.util.Calendar;
 
 public class BookDetails {
     private int book_id;
-    private int isbn;
     private int numCopies;
-    private String title, fName, lName, genre;
+    private String title, fName, lName, genre, isbn;
     private Calendar releaseDate;
 
-    public BookDetails(int book_id, int isbn, int numCopies,String title, String fName, String lName, String genre, Calendar releaseDate) {
+    public BookDetails(int book_id, String isbn, int numCopies,String title, String fName, String lName, String genre, Calendar releaseDate) {
         this.book_id = book_id;
         this.isbn = isbn;
         this.title = title;
@@ -21,7 +20,7 @@ public class BookDetails {
         this.releaseDate = releaseDate;
     }
 
-    public BookDetails(int book_id, int isbn, Calendar releaseDate, int numCopies, Genre genre, Author author){
+    public BookDetails(int book_id, String isbn, Calendar releaseDate, int numCopies, Genre genre, Author author){
         this.book_id = book_id;
         this.isbn = isbn;
         this.releaseDate = releaseDate;
@@ -35,7 +34,7 @@ public class BookDetails {
 
     public BookDetails(ArrayList<String> data){
         this.book_id = Integer.parseInt(data.get(0));
-        this.isbn = Integer.parseInt(data.get(1));
+        this.isbn = data.get(1);
 
         Calendar temp = Calendar.getInstance();
         String date = data.get(2).split( " " )[0];
@@ -61,11 +60,11 @@ public class BookDetails {
         this.book_id = book_id;
     }
 
-    public int getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(int isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 

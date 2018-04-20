@@ -1,6 +1,7 @@
 package Controllers;
 
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import Models.*;
 
 public class BookDetailsController {
@@ -8,7 +9,7 @@ public class BookDetailsController {
     private MySQLDatabase dbController;
 
     public BookDetailsController(){
-        Injector.getDbController();
+        this.dbController = Injector.getDbController();
     }
 
     public ArrayList<BookDetails> getAllBooks(){
@@ -51,6 +52,7 @@ public class BookDetailsController {
 
     public boolean addABook(BookDetails bookDetails, int authorId, int genreId){
         String query = "SELECT MAX(book_id) FROM book_details";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         ArrayList<ArrayList<String>> data = dbController.getData(query, new ArrayList<String>());
         int num = Integer.parseInt(data.get(0).get(0)) + 1;
         
@@ -61,13 +63,13 @@ public class BookDetailsController {
         }
 
         query = "INSERT INTO book_details(book_id, isbn,title,release_date,num_copies,author_id,genre_id)"+
-                 "VALUES(?,?,?,?,?,?)";
+                 "VALUES(?,?,?,?,?,?,?)";
 
         ArrayList<String> params = new ArrayList<>();
         params.add( Integer.toString(num) );
-        params.add(bookDetails.getIsbn()+"");
+        params.add(bookDetails.getIsbn());
         params.add(bookDetails.getTitle());
-        params.add(bookDetails.getReleaseDate().toString());
+        params.add( format.format(bookDetails.getReleaseDate().getTime()) );
         params.add(bookDetails.getNumCopies()+"");
         params.add(authorId+"");
         params.add(genreId+"");

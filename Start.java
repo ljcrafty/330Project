@@ -6,7 +6,7 @@ public class Start
    public static void main(String args[])
    {
       MainContainer mainContainer = new MainContainer();
-      View v = new LoginView();//new MainView("librarian");//LoginView();
+      View v = new MainView("librarian");//LoginView();
       v.registerListeners(new Listener());
       
       mainContainer.addView(v);

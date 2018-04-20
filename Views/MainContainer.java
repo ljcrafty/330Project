@@ -39,7 +39,7 @@ public class MainContainer extends JFrame {
         setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        System.out.println("");
+        System.out.print("");
     }
 
     public void showMessage(String message){

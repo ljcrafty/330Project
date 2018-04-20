@@ -57,7 +57,7 @@ CREATE TABLE genres(
 
 CREATE TABLE book_details(
     book_id int AUTO_INCREMENT,
-    isbn int(13),
+    isbn varchar(13),
     title varchar(255),
     release_date date,
     num_copies int,
@@ -111,3 +111,17 @@ INSERT INTO user_role
 INSERT INTO user_role 
     VALUES(2, 2);
 
+INSERT INTO authors
+    VALUES(1, "Charles", "Dickens");
+INSERT INTO authors
+    VALUES(2, "Leo", "Tolstoy");
+
+INSERT INTO genres
+    VALUES(1, "Fiction", "Literature that describes imaginary things and people");
+INSERT INTO genres
+    VALUES(2, "Historical Fiction", "Literature that describes imaginary things and people, but set in the past and can include real characters of the time period.");
+
+INSERT INTO book_details
+    VALUES(1, "9781548731854", "Great Expectations", "1861-01-01", 2, 1, 1);
+INSERT INTO book_details
+    VALUES(2, "9781977684233", "War and Peace", "1867-05-10", 3, 2, 2);
