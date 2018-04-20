@@ -38,6 +38,8 @@ public class BookCatalogView implements View, ActionListener {
         buttons.setLayout(new FlowLayout());
         selected = new JLabel("Selected: none");
         next = new JButton("Next");
+
+        view.add(buttons,BorderLayout.SOUTH);
     }
 
 
@@ -63,6 +65,8 @@ public class BookCatalogView implements View, ActionListener {
             selectedId = 0;
             this.selected.setText("Selected: none");
         }
+
+
     }
 
     @Override
