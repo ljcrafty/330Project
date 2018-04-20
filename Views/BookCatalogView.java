@@ -25,32 +25,33 @@ public class BookCatalogView implements View, ActionListener {
         selectedId = 0;
 
         configureView();
+
     }
 
     private void configureView() {
         view = new JPanel();
         view.setLayout(new BorderLayout());
 
-        book_collection = new JScrollPane();
-        book_collection.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-
         JPanel buttons = new JPanel();
         buttons.setLayout(new FlowLayout());
         selected = new JLabel("Selected: none");
+        buttons.add(selected);
         next = new JButton("Next");
-
+        buttons.add(next);
         view.add(buttons,BorderLayout.SOUTH);
     }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        BookEntry entry = (BookEntry)e.getSource();
+
+
+        BookEntry entry = (BookEntry)(((JButton)e.getSource()).getParent());
 
         if(selectedId == 0) {
             selectedId = entry.getSelected();
             entry.select();
-            this.selected.setText("Selected: " + entry.title);
+            this.selected.setText("Selected: " + entry.title.getText());
         }
         else if(selectedId != entry.getSelected()){
             for(BookEntry temp: books){
@@ -58,7 +59,7 @@ public class BookCatalogView implements View, ActionListener {
             }
             selectedId = entry.getSelected();
             entry.select();
-            this.selected.setText("Selected: " + entry.title);
+            this.selected.setText("Selected: " + entry.title.getText());
         }
         else {
             entry.deselect();
@@ -99,14 +100,18 @@ public class BookCatalogView implements View, ActionListener {
 
     @Override
     public void setData(Object[] model) {
+        JPanel books = new JPanel();
+        books.setLayout(new GridLayout(0,1));
         for(Object singularBook: model){
             BookEntry entry = new BookEntry((Book)singularBook);
-            book_collection.add(entry);
             books.add(entry);
+            this.books.add(entry);
             entry.registerInternalListeners(this);
         }
 
-            view.add(book_collection, BorderLayout.CENTER);
+        book_collection = new JScrollPane(books);
+        book_collection.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        view.add(book_collection, BorderLayout.CENTER);
     }
 
     class BookEntry extends JPanel{
@@ -123,7 +128,7 @@ public class BookCatalogView implements View, ActionListener {
             this.ISBN = new JLabel(book.getISBN()+"");
             this.select = new JButton("Select");
 
-
+            labelsToPanel();
         }
 
         public BookEntry(){
@@ -133,26 +138,29 @@ public class BookCatalogView implements View, ActionListener {
             this.ISBN = new JLabel("ISBN");
             this.select = new JButton("        ");
             select.setEnabled(false);
+
+            labelsToPanel();
         }
 
         private void labelsToPanel(){
             this.setLayout(new FlowLayout());
             int width = this.getWidth();
 
-            this.title.setSize((int)(width*0.25),this.getHeight());
-            this.author.setSize((int)(width*0.25),this.getHeight());
-            this.genre.setSize((int)(width*0.15),this.getHeight());
-            this.ISBN.setSize((int)(width*0.25),this.getHeight());
+            this.title.setSize((int)(width*0.25),15);
+            this.author.setSize((int)(width*0.25),15);
+            this.genre.setSize((int)(width*0.15),15);
+            this.ISBN.setSize((int)(width*0.25),15);
 
             this.add(this.title);
             this.add(this.author);
             this.add(this.ISBN);
-            this.add(genre);
-            this.add(select);
+            this.add(this.genre);
+            this.add(this.select);
         }
 
         public void registerInternalListeners(ActionListener listener){
             select.addActionListener(listener);
+
         }
 
         public int getSelected(){
@@ -168,4 +176,6 @@ public class BookCatalogView implements View, ActionListener {
         }
 
     }
+
+
 }
