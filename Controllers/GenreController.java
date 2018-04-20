@@ -12,19 +12,30 @@ public class GenreController {
     }
 
     public Genre getGenre(int id){
-        String query = "SELECT genre_id,name,description FROM genre WHERE genre_id = ?";
+        String query = "SELECT genre_id,name,description FROM genres WHERE genre_id = ?";
 
         ArrayList<String> params = new ArrayList<>();
         params.add(id+"");
 
 
-            ArrayList<ArrayList<String>> genreResults = dbController.getData(query,params);
-            return new Genre(genreResults.get(0));
+        ArrayList<ArrayList<String>> genreResults = dbController.getData(query,params);
+        return new Genre(genreResults.get(0));
+    }
+
+    public Genre getGenre(String name){
+        String query = "SELECT genre_id,name,description FROM genres WHERE name = ?";
+
+        ArrayList<String> params = new ArrayList<>();
+        params.add(name+"");
+
+
+        ArrayList<ArrayList<String>> results = dbController.getData(query,params);
+        return ( results != null ? new Genre(results.get(0)) : null );
 
     }
 
     public ArrayList<Genre> getAllGenres(){
-        String query = "SELECT genre_id,name,description FROM genre";
+        String query = "SELECT genre_id,name,description FROM genres";
 
             ArrayList<ArrayList<String>> genreResults = dbController.getData(query,new ArrayList<>());
 

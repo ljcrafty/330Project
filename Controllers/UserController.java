@@ -4,13 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import Models.*;
-import com.auth0.*;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 
 
 public class UserController {
@@ -18,9 +11,8 @@ public class UserController {
 
     //key = token
     //value = privilege level
-    private HashMap<String,Integer> loggedUsers;
+    private HashMap<Integer,Integer> loggedUsers;
     private MySQLDatabase dbController;
-    private String key = "s0m3r4nd0mk3y";
     
     public UserController(){
             this.dbController = Injector.getDbController();
@@ -33,7 +25,7 @@ public class UserController {
             {
                 System.out.println("Error connecting to the database");
             }
-//         this.loggedUsers = new HashMap<String, Integer>();
+            this.loggedUsers = new HashMap<Integer, Integer>();
     }
 
     // PUBLIC METHODS
@@ -58,22 +50,9 @@ public class UserController {
                 data.get(0).get(1), data.get(0).get(2), data.get(0).get(3));
 
             if(BCrypt.checkpw(password,temp.getPasswordHash())){
-
-//                return data.get(0).get(0);
-                try {
-                    Algorithm algorithm = Algorithm.HMAC256(key);
-                    String token = JWT.create()
-                            .withIssuer("auth0")
-                            .sign(algorithm);
-
-                    loggedUsers.put(token,temp.getRole());
-
-                    return token;
-                } catch (UnsupportedEncodingException exception){
-                    return "unexpected_err_UTF";
-                } catch (JWTCreationException exception){
-                    return "unexpected_err_creation";
-                }
+                
+                loggedUsers.put(temp.getId(),temp.getRole());
+                return temp.getId() + "";
             }
             else{
                 return "invalid password";
@@ -85,14 +64,14 @@ public class UserController {
     public User getUser(int id)
     {
         String query = "SELECT user_id, username, password, first_name, last_name, date_of_birth, role_id " + 
-            "FROM users JOIN user_role USING user_id WHERE user_id = ?;";
+            "FROM users JOIN user_role USING (user_id) WHERE user_id = ?;";
 
         ArrayList<String> params = new ArrayList<>();
         params.add(id+"");
 
         ArrayList<ArrayList<String>> results = dbController.getData(query,params);
         
-        if( results != null )
+        if( results != null && results.size() > 0 )
         {
             return new User(results.get(0));
         }
@@ -130,22 +109,17 @@ public class UserController {
 
     public boolean authenticate(String token, int required_privilege){
 
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(key);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("auth0")
-                    .build(); //Reusable verifier instance
-            DecodedJWT jwt = verifier.verify(token);
-        } catch (UnsupportedEncodingException exception){
-            //UTF-8 encoding not supported
-        } catch (JWTVerificationException exception){
-            return false;                                   //token is invalid
+        if(!loggedUsers.containsKey(Integer.parseInt(token)))
+        {
+            return false;
         }
 
-        if(!loggedUsers.containsKey(token)) return false;
-
-        if(loggedUsers.get(token)<required_privilege) return false;
-        else return true;
+        if(loggedUsers.get(Integer.parseInt(token))>required_privilege)
+        {
+            return false;
+        }
+        
+        return true;
 
 
     }

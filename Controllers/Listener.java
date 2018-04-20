@@ -9,14 +9,19 @@ import Views.*;
 
 public class Listener implements ActionListener
 {
-      private HashMap<String, JTextField> fields;
       private UserController uc;
+      private BookDetailsController bdc;
+      private AuthorController ac;
+      private GenreController gc;
       private String token;
       private int userId;
       
       public Listener()
       {
             this.uc = new UserController();
+            this.bdc = new BookDetailsController();
+            this.ac = new AuthorController();
+            this.gc = new GenreController();
             this.token = "";
             this.userId = 1;
       }
@@ -25,12 +30,20 @@ public class Listener implements ActionListener
       {
             switch( e.getActionCommand() )
             {
+                  case "start":
+                        show(new LoginView(), e);
+                        break;
+                  
                   case "home":
                         home(e);
                         break;
 
                   case "save user":
                         saveUser(e);
+                        break;
+
+                  case "add book":
+                        addBook(e);
                         break;
 
                   case "Login":
@@ -75,17 +88,13 @@ public class Listener implements ActionListener
                         break;
                   
                   case " Add a Book":
-                        
+                        show( new AddBookView(), e );
                         break;
                   
                   case " Add a User":
                         ProfileView temp = new ProfileView( new User() );
                         temp.setEdit(true);
                         show( temp, e );
-                        break;
-                  
-                  case "start":
-                        show(new LoginView(), e);
                         break;
                   
                   default:
@@ -135,13 +144,67 @@ public class Listener implements ActionListener
        */
       private void home(ActionEvent e)
       {
-            if( uc.authenticate(token, 1) )
+            if( uc.authenticate(this.userId + "", 1) )
             {
                   show( new MainView("librarian"), e );
             }
             else
             {
                   show( new MainView("user"), e );
+            }
+      }
+
+      private void addBook(ActionEvent e)
+      {
+            String[] bookData = this.getMainCont(e).getData();
+            String error = "";
+            Calendar dob = Calendar.getInstance();
+            
+            //validate date
+            if( !bookData[6].equals("") && !bookData[7].equals("") && !bookData[8].equals("") )
+            {
+                  int day = Integer.parseInt(bookData[6]);
+                  int mo = Integer.parseInt(bookData[7]);
+                  int yr = Integer.parseInt(bookData[8]);
+                  dob.set(yr, mo, day);
+            }
+            else
+                  error += "release date\n";
+
+            //validate other
+            error += (bookData[0].equals("")? "ISBN\n" : "");
+            error += (bookData[1].equals("")? "Title\n" : "");
+            error += (bookData[2].equals("")? "Author first name\n" : "");
+            error += (bookData[3].equals("")? "Author last name\n" : "");
+            error += (bookData[4].equals("")? "Genre name\n" : "");
+            error += (bookData[5].equals("")? "Number of Copies\n" : "");
+            
+            //show errors
+            if( !error.equals("") )
+            {
+                  JFrame frame = new JFrame();
+                  error("Invalid input. Please fix the following fields:\n" + error, "Invalid input");
+            }
+            else
+            {
+                  //get author and genre details to get id
+                  Author aut = ac.getAuthor( bookData[2], bookData[3] );
+                  Genre gen = gc.getGenre(bookData[4]);
+
+                  BookDetails temp = new BookDetails(0, Integer.parseInt(bookData[0]), 
+                        Integer.parseInt(bookData[5]), bookData[1], bookData[2], bookData[3], 
+                        bookData[4], dob);
+                  
+                  //try to add user
+                  if( bdc.addABook(temp, aut.getId(), gen.getId()) )
+                  {
+                        show( new LoginView(), e);
+                  }
+                  else
+                  {
+                        JFrame frame = new JFrame();
+                        error( "Cannot add data", "Creation error" );
+                  }
             }
       }
 
@@ -193,8 +256,8 @@ public class Listener implements ActionListener
             if( this.userId != 0 )
             {
                   //get data for view
-                  //User temp = uc.getUser(this.userId);
-                  User temp = new User("lauren", "randomStuff", "Lauren", "Johnston", 1, Calendar.getInstance(), 1);
+                  User temp = uc.getUser(this.userId);
+                  //User temp = new User("lauren", "randomStuff", "Lauren", "Johnston", 1, Calendar.getInstance(), 1);
                   View pview = new ProfileView(temp);
             
                   show( pview, e );
@@ -253,7 +316,6 @@ public class Listener implements ActionListener
             Calendar dob = Calendar.getInstance();
             
             //validate date
-            //TODO: validate better
             if( !fields[4].equals("") && !fields[5].equals("") && !fields[6].equals("") )
             {
                   int day = Integer.parseInt(fields[4]);

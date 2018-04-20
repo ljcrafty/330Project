@@ -50,11 +50,22 @@ public class BookDetailsController {
 
 
     public boolean addABook(BookDetails bookDetails, int authorId, int genreId){
-        String query = "INSERT INTO book_details(isbn,title,release_date,num_copies,author_id,genre_id)"+
+        String query = "SELECT MAX(book_id) FROM book_details";
+        ArrayList<ArrayList<String>> data = dbController.getData(query, new ArrayList<String>());
+        int num = Integer.parseInt(data.get(0).get(0)) + 1;
+        
+        if( data == null )
+        {
+            System.out.println("no data");
+            return false;
+        }
+
+        query = "INSERT INTO book_details(book_id, isbn,title,release_date,num_copies,author_id,genre_id)"+
                  "VALUES(?,?,?,?,?,?)";
 
         ArrayList<String> params = new ArrayList<>();
-        params.add(bookDetails.getBook_id()+"");
+        params.add( Integer.toString(num) );
+        params.add(bookDetails.getIsbn()+"");
         params.add(bookDetails.getTitle());
         params.add(bookDetails.getReleaseDate().toString());
         params.add(bookDetails.getNumCopies()+"");
