@@ -255,7 +255,8 @@ public class SearchView implements View{
                 }
 
                 for(int i = 3; i<5; i++){
-                    retVal[i] = ((JTextField)(components.get(i-1))).getText();
+                    String text = ((JTextField)(components.get(i-2))).getText();
+                    retVal[i] = text;
                 }
 
             }break;
