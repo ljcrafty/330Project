@@ -10,7 +10,7 @@ public class ProfileView implements View
 {
     private User user;
     private JTextField username, password, fname, lname, day, mo, yr;
-    private JLabel lusername, lpassword, lfname, llname, lday, lmo, lyr, lrole = new JLabel("2");
+    private JLabel lusername, lpassword, lfname, llname, lday, lmo, lyr, lrole;
     private JButton edit, save = new JButton(), cancel = new JButton(), cancelEdit;
     private ActionListener listener;
     private JPanel view = new JPanel();
@@ -288,6 +288,7 @@ public class ProfileView implements View
     public void setData(Object[] model)
     {
         this.user = (User) model[0];
+        this.lrole = new JLabel( Integer.toString(this.user.getRole()) );
         this.viewSetup();
     }
 }

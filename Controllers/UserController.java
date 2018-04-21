@@ -3,6 +3,7 @@ package Controllers;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.text.SimpleDateFormat;
 import Models.*;
 
 
@@ -112,6 +113,28 @@ public class UserController {
     }
 
     /**
+     * Update a user's information in the database
+     * @param newUser a User object that contains the new data for the user and has the correct user id
+     * @return whether or not the update was successful
+     */
+    public boolean updateUser(User newUser)
+    {
+        String query = "UPDATE users SET username = ?, password = ?, first_name = ?, " + 
+            "last_name = ?, date_of_birth = ? WHERE user_id = ?";
+        
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        ArrayList<String> params = new ArrayList<String>();
+        params.add( newUser.getUsername() );
+        params.add( BCrypt.hashpw(newUser.getPasswordHash(), BCrypt.gensalt(12)) );
+        params.add( newUser.getFName() );
+        params.add( newUser.getLName() );
+        params.add( format.format(newUser.getDOB().getTime()) );
+        params.add( Integer.toString(newUser.getId()) );
+
+        return dbController.setData( query, params );
+    }
+
+    /**
      * Method used to add new user to database
      * @param newUser
      * @return
@@ -175,9 +198,7 @@ public class UserController {
             params.add(user.getId() + "");
             params.add(user.getRole() + "");
 
-            check = dbController.setData(query, params);
-
-            return check;
+            return dbController.setData(query, params);
         }
 
         return false;

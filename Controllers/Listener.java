@@ -85,10 +85,6 @@ public class Listener implements ActionListener
                         //when selecting user from search, just pull data and then send model into view
                         break;
                   
-                  case " Check Overdue Loans":
-                        
-                        break;
-                  
                   case " Add a Book":
                         show( new AddBookView(), e );
                         break;
@@ -246,9 +242,24 @@ public class Listener implements ActionListener
             //if the user in getData has an id, it's an update call
             if( !userData[0].equals("0") )
             {
-                  User user = uc.getUser( Integer.parseInt(userData[0]) );
+                  Calendar dob = Calendar.getInstance();
+                  int day = Integer.parseInt(userData[5]);
+                  int mo = Integer.parseInt(userData[6]);
+                  int yr = Integer.parseInt(userData[7]);
+                  dob.set(yr, mo, day);
+                  
+                  User user = new User( userData[1], userData[2], userData[3], 
+                     userData[4], Integer.parseInt(userData[8]), dob,
+                     Integer.parseInt(userData[0]) );
 
-                  //TODO: add when update is added to controller
+                  if( uc.updateUser(user) )
+                  {
+                        home(e);
+                  }
+                  else
+                  {
+                        error("There was a problem adding your data", "Database Error");
+                  }
             }
             else //otherwise, it's an insert
             {
