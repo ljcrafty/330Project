@@ -4,30 +4,72 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import Models.*;
+import java.text.SimpleDateFormat;
 
 public class LoansView implements View
 {
     private JPanel view = new JPanel();
-    private JButton cancel, done;
+    private JButton done;
     private String type;
-    //NEED A MODEL HERE
+    private Loan[] loans;
+    private Reservation[] reservations;
 
     public LoansView( String type )
     {
-        
+        this.type = type;
     }
 
     private void viewSetup()
     {
-        this.view.setLayout( new GridLayout(0, 2, 10, 8) );
+        this.view.setLayout( new GridLayout(0, 1, 2, 8) );
 
-        //buttons
-        cancel = new JButton("Cancel");
-        cancel.setActionCommand("home");
-        this.view.add(cancel);
+        JPanel list = new JPanel( new FlowLayout() );
+        int size = ( type == "loans" ? loans.length : reservations.length );
 
-        done = new JButton("Save");
-        done.setActionCommand("add book");
+        for( int i = 0; i < size; i++ )
+        {
+            JPanel item = new JPanel( new GridLayout(0, 2, 2, 8) );
+            Calendar date = (type == "loans" ? loans[i].getDueDate() : reservations[i].getDateReserved());
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+
+            if(type == "loans")
+            {
+                Book book = loans[i].getBook();
+
+                JLabel lbl = new JLabel( "ISBN: " + book.getISBN() );
+                item.add(lbl);
+
+                lbl = new JLabel( "Title: " + book.getTitle() );
+                item.add(lbl);
+
+                lbl = new JLabel( "Author: " + book.getAuthorFName() + " " + book.getAuthorLName() );
+                item.add(lbl);
+            }
+            else
+            {
+                BookDetails book = reservations[i].getBook();
+
+                JLabel lbl = new JLabel( "ISBN: " + book.getIsbn() );
+                item.add(lbl);
+
+                lbl = new JLabel( "Title: " + book.getTitle() );
+                item.add(lbl);
+
+                lbl = new JLabel( "Author: " + book.getfName() + " " + book.getlName() );
+                item.add(lbl);
+            }
+
+            JLabel lbl = new JLabel( (type == "loans" ? "Due Date: " : "Date Reserved: ") + 
+                format.format(date.getTime()) );
+            item.add(lbl);
+
+            list.add(item);
+        }
+
+        //button
+        done = new JButton("Done");
+        done.setActionCommand("home");
         this.view.add(done);
     }
 
@@ -37,7 +79,7 @@ public class LoansView implements View
      */
     public String getTitle()
     {
-        return type + " View";
+        return "My " + type;
     }
 
     /**
@@ -55,7 +97,6 @@ public class LoansView implements View
      */
     public void registerListeners(ActionListener listener)
     {
-        this.cancel.addActionListener(listener);
         this.done.addActionListener(listener);
     }
 
@@ -67,7 +108,6 @@ public class LoansView implements View
     {
         ArrayList<Object> listeners = new ArrayList<Object>();
 
-        listeners.add( this.cancel.getListeners(ActionListener.class)[0] );
         listeners.add( this.done.getListeners(ActionListener.class)[0] );
 
         return listeners;
@@ -79,17 +119,7 @@ public class LoansView implements View
      */
     public String[] getData()
     {
-        return new String[]{
-            isbn.getText(), 
-            title.getText(), 
-            fname.getText(), 
-            lname.getText(), 
-            genre.getText(), 
-            numCopies.getText(), 
-            day.getText(), 
-            mo.getText(), 
-            yr.getText()
-        };
+        return null;
     }
 
     /**
@@ -99,6 +129,14 @@ public class LoansView implements View
     public void setData(Object[] model)
     {
         //set model
+        if(this.type == "loans")
+        {
+            this.loans = (Loan[])model;
+        }
+        else
+        {
+            this.reservations = (Reservation[])model;
+        }
 
         viewSetup();
     }

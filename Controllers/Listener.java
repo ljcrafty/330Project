@@ -13,6 +13,7 @@ public class Listener implements ActionListener
       private BookDetailsController bdc;
       private AuthorController ac;
       private GenreController gc;
+      private BookController bc;
       private String token;
       private int userId;
       
@@ -22,6 +23,7 @@ public class Listener implements ActionListener
             this.bdc = Injector.getBookDetailsController();
             this.ac = Injector.getAuthorController();
             this.gc = Injector.getGenreController();
+            this.bc = Injector.getBookController();
             this.token = "";
             this.userId = 1;
       }
@@ -72,11 +74,11 @@ public class Listener implements ActionListener
                         break;
                   
                   case " My Loaned Books":
-                        
+                        loans(e, "loans");
                         break;
                   
                   case " My Reservations":
-                        
+                        loans(e, "reservations");
                         break;
                   
                   case " Search for a User":
@@ -154,6 +156,30 @@ public class Listener implements ActionListener
             }
       }
 
+      private void loans(ActionEvent e, String type)
+      {
+            LoansView lv = new LoansView(type);
+
+            //get data
+            if(type == "loans")
+            {
+                  Loan[] loans = bc.getLoans(this.userId);
+                  lv.setData(loans);
+            }
+            else
+            {
+                  Reservation[] reservations = bc.getReservations(this.userId);
+                  lv.setData(reservations);
+            }
+
+            //show view
+            show( lv, e );
+      }
+
+      /**
+       * Adds a new book to the database
+       * @param e the event that triggered the addition
+       */
       private void addBook(ActionEvent e)
       {
             String[] bookData = this.getMainCont(e).getData();
