@@ -23,18 +23,18 @@ public class Loan {
         this.id = Integer.parseInt(dbResult.get(11));
 
         Calendar temp = Calendar.getInstance();
-        String date = dbResult.get(14).split( " " )[0];
+        String date = dbResult.get(13).split( " " )[0];
         int yr = Integer.parseInt( date.split("-")[0] );
         int mo = Integer.parseInt( date.split("-")[1] ) - 1;
         int day = Integer.parseInt( date.split("-")[2] );
         temp.set( yr, mo, day ); //YYYY-MM-DD
-        book = new Book(dbResult.get(6),dbResult.get(7),dbResult.get(8),dbResult.get(9),dbResult.get(10),Integer.parseInt(dbResult.get(4)),Integer.parseInt(dbResult.get(5)),temp);
+        book = new Book(dbResult.get(6),dbResult.get(7),dbResult.get(8),dbResult.get(9),dbResult.get(10),Integer.parseInt(dbResult.get(4)),Long.parseLong(dbResult.get(5)),temp);
         userId = Integer.parseInt(dbResult.get(0));
 
 
 
         temp = Calendar.getInstance();
-        date = dbResult.get(13).split( " " )[0];
+        date = dbResult.get(12).split( " " )[0];
         yr = Integer.parseInt( date.split("-")[0] );
         mo = Integer.parseInt( date.split("-")[1] ) - 1;
         day = Integer.parseInt( date.split("-")[2] );

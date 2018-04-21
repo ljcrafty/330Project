@@ -57,7 +57,7 @@ CREATE TABLE genres(
 
 CREATE TABLE book_details(
     book_id int AUTO_INCREMENT,
-    isbn varchar(13),
+    isbn bigint(13),
     title varchar(255),
     release_date date,
     num_copies int,
@@ -80,16 +80,17 @@ CREATE TABLE loans(
     copy_id int,
     user_id int,
     due_date date,
-    CONSTRAINT pk_loans PRIMARY KEY (copy_id, user_id),
+    CONSTRAINT pk_loans PRIMARY KEY (book_id, copy_id, user_id),
     CONSTRAINT fk_users FOREIGN KEY (user_id) REFERENCES users(user_id),
     CONSTRAINT fk_book_copies FOREIGN KEY (book_id, copy_id) REFERENCES book_copies(book_id, copy_id)
 );
 
 CREATE TABLE reservations(
+    res_id int,
     book_id int,
     user_id int,
     date_reserved date,
-    CONSTRAINT pk_reservations PRIMARY KEY(book_id, user_id),
+    CONSTRAINT pk_reservations PRIMARY KEY(res_id),
     CONSTRAINT fk_user_reservations FOREIGN KEY (user_id) REFERENCES users(user_id),
     CONSTRAINT fk_book_details_reservations FOREIGN KEY (book_id) REFERENCES book_details(book_id)
 );
@@ -122,6 +123,22 @@ INSERT INTO genres
     VALUES(2, "Historical Fiction", "Literature that describes imaginary things and people, but set in the past and can include real characters of the time period.");
 
 INSERT INTO book_details
-    VALUES(1, "9781548731854", "Great Expectations", "1861-01-01", 2, 1, 1);
+    VALUES(1, 9781548731854, "Great Expectations", "1861-01-01", 2, 1, 1);
 INSERT INTO book_details
-    VALUES(2, "9781977684233", "War and Peace", "1867-05-10", 3, 2, 2);
+    VALUES(2, 9781977684233, "War and Peace", "1867-05-10", 3, 2, 2);
+
+INSERT INTO book_copies
+    VALUES(1, 1);
+INSERT INTO book_copies
+    VALUES(2, 1);
+INSERT INTO book_copies
+    VALUES(1, 2);
+INSERT INTO book_copies
+    VALUES(2, 2);
+
+INSERT INTO loans
+    VALUES(1, 1, 2, "2018-04-20");
+INSERT INTO loans
+    VALUES(2, 1, 2, "2018-04-20");
+INSERT INTO reservations
+    VALUES(1, 2, 2, "2018-04-21");

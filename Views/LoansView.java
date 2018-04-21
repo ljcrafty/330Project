@@ -22,14 +22,20 @@ public class LoansView implements View
 
     private void viewSetup()
     {
-        this.view.setLayout( new GridLayout(0, 1, 2, 8) );
+        this.view.setLayout( new BorderLayout() );
 
-        JPanel list = new JPanel( new FlowLayout() );
+        JPanel list = new JPanel(new GridLayout(0, 1));
+        JScrollPane scroll = new JScrollPane(list);
+        scroll.setPreferredSize( new Dimension(500, 500) );
         int size = ( type == "loans" ? loans.length : reservations.length );
 
+        //creating each item
         for( int i = 0; i < size; i++ )
         {
-            JPanel item = new JPanel( new GridLayout(0, 2, 2, 8) );
+            JPanel item = new JPanel( new GridLayout(0, 2, 2, 0) );
+            item.setBorder(BorderFactory.createLineBorder(Color.black));
+            item.setPreferredSize( new Dimension(500, 50) );
+
             Calendar date = (type == "loans" ? loans[i].getDueDate() : reservations[i].getDateReserved());
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -37,7 +43,7 @@ public class LoansView implements View
             {
                 Book book = loans[i].getBook();
 
-                JLabel lbl = new JLabel( "ISBN: " + book.getISBN() );
+                JLabel lbl = new JLabel( "ISBN: " + Long.toString(book.getISBN()) );
                 item.add(lbl);
 
                 lbl = new JLabel( "Title: " + book.getTitle() );
@@ -67,10 +73,17 @@ public class LoansView implements View
             list.add(item);
         }
 
+        if(size == 0)
+        {
+            list.add( new JLabel("No " + this.type + ".") );
+        }
+
+        this.view.add(scroll, BorderLayout.CENTER);
+
         //button
         done = new JButton("Done");
         done.setActionCommand("home");
-        this.view.add(done);
+        this.view.add(done, BorderLayout.SOUTH);
     }
 
     /**

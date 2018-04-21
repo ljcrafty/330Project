@@ -67,7 +67,7 @@ public class BookDetailsController {
 
         ArrayList<String> params = new ArrayList<>();
         params.add( Integer.toString(num) );
-        params.add(bookDetails.getIsbn());
+        params.add( Long.toString(bookDetails.getIsbn()) );
         params.add(bookDetails.getTitle());
         params.add( format.format(bookDetails.getReleaseDate().getTime()) );
         params.add(bookDetails.getNumCopies()+"");

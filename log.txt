@@ -34,3 +34,21 @@ Message: : Parameter index out of range (7 > number of parameters, which is 6).
 SQL State: : S1009
 Error Code: : 0
 
+Sat Apr 21 15:31:11 CEST 2018
+class java.sql.SQLException
+Message: : Parameter index out of range (1 > number of parameters, which is 0).
+SQL State: : S1009
+Error Code: : 0
+
+Sat Apr 21 15:44:52 CEST 2018
+class java.sql.SQLException
+Message: : Parameter index out of range (1 > number of parameters, which is 0).
+SQL State: : S1009
+Error Code: : 0
+
+Sat Apr 21 15:48:01 CEST 2018
+class java.sql.SQLException
+Message: : Parameter index out of range (1 > number of parameters, which is 0).
+SQL State: : S1009
+Error Code: : 0
+

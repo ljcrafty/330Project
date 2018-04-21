@@ -6,7 +6,8 @@ import java.util.Calendar;
 public class Book
 {
     private String title, author_fname, author_lname, genre_name, genre_desc;
-    private int id, isbn;
+    private long isbn;
+    private int id;
     private Calendar release_date, due_date;
 
     public Book()
@@ -23,7 +24,7 @@ public class Book
     }
 
     public Book( String title, String author_fname, String author_lname, String genre_name, 
-        String genre_desc,int id, int isbn, Calendar release_date )
+        String genre_desc,int id, long isbn, Calendar release_date )
     {
         this.title = title;
         this.author_fname = author_fname;
@@ -51,7 +52,7 @@ public class Book
         this.genre_name = vals.get(6);
         this.genre_desc = vals.get(7);
         this.id = Integer.parseInt( vals.get(0) );
-        this.isbn = Integer.parseInt( vals.get(1) );
+        this.isbn = Long.parseLong( vals.get(1) );
         this.release_date = temp;
         this.due_date = null;
     }
@@ -64,7 +65,7 @@ public class Book
         this.genre_name = genre.getName();
         this.genre_desc = genre.getDescription();
         this.id = id;
-        this.isbn = Integer.parseInt(bookDetails.getIsbn());
+        this.isbn = bookDetails.getIsbn();
         this.release_date = bookDetails.getReleaseDate();
         this.due_date = null;
     }
@@ -100,7 +101,7 @@ public class Book
         return this.id;
     }
 
-    public int getISBN()
+    public long getISBN()
     {
         return this.isbn;
     }
@@ -146,7 +147,7 @@ public class Book
         this.id = id;
     }
 
-    public void setISBN( int isbn )
+    public void setISBN( long isbn )
     {
         this.isbn = isbn;
     }

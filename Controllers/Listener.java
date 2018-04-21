@@ -164,6 +164,7 @@ public class Listener implements ActionListener
             if(type == "loans")
             {
                   Loan[] loans = bc.getLoans(this.userId);
+                  System.out.println(loans.length);
                   lv.setData(loans);
             }
             else
@@ -217,7 +218,7 @@ public class Listener implements ActionListener
                   Author aut = ac.getAuthor( bookData[2], bookData[3] );
                   Genre gen = gc.getGenre(bookData[4]);
 
-                  BookDetails temp = new BookDetails(0, bookData[0], 
+                  BookDetails temp = new BookDetails(0, Long.parseLong(bookData[0]), 
                         Integer.parseInt(bookData[5]), bookData[1], bookData[2], bookData[3], 
                         bookData[4], dob);
                   
