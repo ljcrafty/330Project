@@ -16,6 +16,7 @@ public class Listener implements ActionListener
       private BookController bc;
       private String token;
       private int userId;
+      private int userRole;
       
       public Listener()
       {
@@ -26,6 +27,7 @@ public class Listener implements ActionListener
             this.bc = Injector.getBookController();
             this.token = "";
             this.userId = 1;
+            this.userRole = 1;
       }
       
       public void actionPerformed(ActionEvent e)
@@ -64,14 +66,11 @@ public class Listener implements ActionListener
                         profile(e);
                         break;
                         
-                  case " Search By Author":
-                        break;
-                        
-                  case " Search By Title":
-                        break;
-                  
-                  case " Search By Genre":
-                        break;
+                  case " Find Book":{
+                        View search = new SearchView("Book",userRole);
+                        show(search,e);
+                  }break;
+
                   
                   case " My Loaned Books":
                         loans(e, "loans");
@@ -81,9 +80,10 @@ public class Listener implements ActionListener
                         loans(e, "reservations");
                         break;
                   
-                  case " Search for a User":
-                        //when selecting user from search, just pull data and then send model into view
-                        break;
+                  case "Search": {
+                        String[] data = this.getMainCont(e).getData();
+                        show(constructSearchResults(data),e);
+                  }break;
                   
                   case " Add a Book":
                         show( new AddBookView(), e );
@@ -94,7 +94,11 @@ public class Listener implements ActionListener
                         temp.setEdit(true);
                         show( temp, e );
                         break;
-                  
+
+                  case " Search for a User":{
+                        View search = new SearchView("User",userRole);
+                        show(search,e);
+                  }
                   default:
                         break;
             }//end switch
@@ -328,10 +332,12 @@ public class Listener implements ActionListener
                   if( uc.authenticate(token, 1) )
                   {
                         show( new MainView("librarian"), e );
+                        userRole = 1;
                   }
                   else
                   {
                         show( new MainView("user"), e );
+                        userRole = 2;
                   }
             }
             else //failed login, give error
@@ -379,7 +385,7 @@ public class Listener implements ActionListener
             else
             {
                   //make user
-                  User temp = new User(fields[0], fields[1], fields[2], fields[3], 1, dob, 1);
+                  User temp = new User(fields[0], fields[1], fields[2], fields[3], 2, dob, 1);
                   
                   //try to add user
                   if( uc.addUser(temp) )
@@ -392,5 +398,36 @@ public class Listener implements ActionListener
                         error( "Cannot add data", "Creation error" );
                   }
             }
+      }
+
+      private View constructSearchResults(String[] searchParams){
+            String type = searchParams[0];
+
+            CollectionOverview overview = new CollectionOverview(type);
+            ArrayList results = null;
+            switch(type){
+                  case "Book":{
+                        results = bc.searchBooks(searchParams);
+                  }break;
+                  case "Loan":{
+                        results = bc.searchLoans(searchParams);
+                  }break;
+                  case "Reservations":{
+                        results = bc.searchReservations(searchParams);
+                  }
+                  case "User":{
+                        results = uc.searchUsers(searchParams);
+                  }break;
+            }
+
+            Object[] data = new Object[results.size()];
+
+            for(int i=0; i< results.size(); i++){
+                  data[i] = results.get(i);
+            }
+
+            overview.setData(data);
+
+            return overview;
       }
 }//end class
