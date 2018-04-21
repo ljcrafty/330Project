@@ -37,7 +37,7 @@ public class SearchView implements View{
             case "User":{
                 createUserSearch();
             }break;
-            case "Reservation":{
+            default:{
                 createReservationSearch();
             }break;
 
@@ -260,7 +260,7 @@ public class SearchView implements View{
 
             }break;
 
-            case "Reservation":{
+            default:{
                 retVal = new String[6];
 
                 retVal[0] = type;
@@ -279,7 +279,7 @@ public class SearchView implements View{
                 retVal[3] = title;
 
                 if(components.size() == 3){
-                    String name = (String)(((JComboBox)components.get(3)).getSelectedItem());
+                    String name = (String)(((JComboBox)components.get(2)).getSelectedItem());
                     if(name.equals("None Selected")){
                         retVal[4] = "";
                         retVal[5] = "";
