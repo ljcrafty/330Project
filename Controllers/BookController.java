@@ -138,13 +138,13 @@ public class BookController {
     public Reservation[] getReservations(int userId)
     {
         String query = "SELECT book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
-                "authors.last_name6, genres.name, genres.description, reservations.user_id,"+
+                "authors.last_name, genres.name, genres.description, reservations.user_id,"+
                 "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, date_of_birth "+
                 "FROM reservations "+
                 "JOIN users USING (user_id) "+
                 "JOIN book_details USING (book_id) "+
                 "JOIN authors USING (author_id) "+
-                " JOIN genres USING (genre_id);";
+                "JOIN genres USING (genre_id) WHERE reservations.user_id = ?;";
 
         ArrayList<String> params = new ArrayList<>();
         params.add(userId+"");
