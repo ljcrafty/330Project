@@ -8,37 +8,47 @@ public class Reservation {
     private BookDetails book;
     private User user;
     private Calendar dateReserved;
+    private int id;
 
-    public Reservation(BookDetails book, User user, Calendar date){
+    public Reservation(int id,BookDetails book, User user, Calendar date){
+        this.id = id;
         this.book = book;
         this.user = user;
         this.dateReserved = date;
     }
 
     public Reservation(ArrayList<String> dbResult){
-
+        this.id = Integer.parseInt(dbResult.get(0));
         Calendar temp = Calendar.getInstance();
-        String date = dbResult.get(3).split( " " )[0];
+        String date = dbResult.get(3).split( " " )[1];
         int yr = Integer.parseInt( date.split("-")[0] );
         int mo = Integer.parseInt( date.split("-")[1] ) - 1;
         int day = Integer.parseInt( date.split("-")[2] );
         temp.set( yr, mo, day ); //YYYY-MM-DD
 
-        this.book = new BookDetails(Integer.parseInt(dbResult.get(0)),Long.parseLong(dbResult.get(1)),Integer.parseInt(dbResult.get(4)),dbResult.get(2),dbResult.get(5),dbResult.get(6),dbResult.get(7),temp);
+        this.book = new BookDetails(Integer.parseInt(dbResult.get(0)),Long.parseLong(dbResult.get(2)),Integer.parseInt(dbResult.get(5)),dbResult.get(3),dbResult.get(6),dbResult.get(7),dbResult.get(8),temp);
     
         Calendar resDate = Calendar.getInstance();
-        String da = dbResult.get(10).split( " " )[0];
+        String da = dbResult.get(10).split( " " )[1];
         yr = Integer.parseInt( da.split("-")[0] );
         mo = Integer.parseInt( da.split("-")[1] ) - 1;
         day = Integer.parseInt( da.split("-")[2] );
         resDate.set( yr, mo, day ); //YYYY-MM-DD
         this.dateReserved = resDate;
         
-        this.user = new User( Integer.parseInt(dbResult.get(11)), "", "", "1" );
+        this.user = new User( Integer.parseInt(dbResult.get(12)), "", "", "1" );
     }
 
     public int getUserId(){
         return user.getId();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getBookId(){
