@@ -18,10 +18,10 @@ public class Listener implements ActionListener
       
       public Listener()
       {
-            this.uc = new UserController();
-            this.bdc = new BookDetailsController();
-            this.ac = new AuthorController();
-            this.gc = new GenreController();
+            this.uc = Injector.getUser();
+            this.bdc = Injector.getBookDetailsController();
+            this.ac = Injector.getAuthorController();
+            this.gc = Injector.getGenreController();
             this.token = "";
             this.userId = 1;
       }

@@ -79,6 +79,23 @@ public class UserController {
         return null;
     }
 
+    public ArrayList<User> getAllUsers(){
+        String query = "SELECT user_id, username, password, first_name, last_name, date_of_birth, role_id " +
+                "FROM users JOIN user_role USING (user_id);";
+
+        ArrayList<String> params = new ArrayList<>();
+
+
+        ArrayList<ArrayList<String>> results = dbController.getData(query,params);
+        ArrayList<User> users = new ArrayList<>();
+
+        for(ArrayList<String> anResult: results){
+            users.add(new User(anResult));
+        }
+
+        return users;
+    }
+
 
     /**
      * Method used to log out
@@ -165,6 +182,7 @@ public class UserController {
 
         return false;
     }
+
 
 
 }
