@@ -204,6 +204,48 @@ public class UserController {
         return false;
     }
 
+    public ArrayList<User> searchUsers(String[] parameters){
+        boolean checkParams = false;
+
+        for(String s:parameters){
+            if(!s.equals("")) checkParams = true;
+        }
+        //fn,ln,uid,username
+        String[] headers = new String[]{
+                "first_name",
+                "last_name",
+                "user_id",
+                "username"
+        };
+
+        String query = "SELECT user_id, username, password, first_name, last_name, date_of_birth, role_id " +
+                "FROM users JOIN user_role USING (user_id);";
+
+
+        ArrayList<String> params = new ArrayList<>();
+        if(checkParams){
+            query += " WHERE ";
+            for(int i = 0; i< parameters.length-1; i++){
+                if(!parameters[i].equals("")){
+                    query += String.format("%s = ? AND ",headers[i]);
+                    params.add(parameters[i]);
+                }
+
+            }
+            //last entry
+            query += String.format("%s = ? AND ",headers[parameters.length-1]);
+            params.add(parameters[parameters.length-1]);
+        }
+
+        ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
+        ArrayList<User> retVal = new ArrayList<>();
+        for(ArrayList<String> entry: dbResults){
+            retVal.add(new User(entry));
+        }
+
+        return retVal;
+    }
+
 
 
 }

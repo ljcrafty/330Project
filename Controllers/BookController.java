@@ -137,7 +137,7 @@ public class BookController {
 
     public Reservation[] getReservations(int userId)
     {
-        String query = "SELECT id, book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
+        String query = "SELECT res_id, book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
                 "authors.last_name, genres.name, genres.description, reservations.user_id,"+
                 "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, date_of_birth "+
                 "FROM reservations "+
@@ -177,7 +177,7 @@ public class BookController {
     }
 
     public ArrayList<Reservation> getAllReservations(){
-        String query = "SELECT id,book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
+        String query = "SELECT res_id,book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
                 "authors.last_name6, genres.name, genres.description, reservations.user_id,"+
                 "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, date_of_birth "+
                 "FROM reservations "+
@@ -205,7 +205,7 @@ public class BookController {
      */
     public Reservation getReservationDetail(BookDetails details, int userId)
     {
-        String query = "SELECT book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
+        String query = "SELECT res_id,book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
                 "authors.last_name6, genres.name, genres.description, reservations.user_id,"+
                 "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, age "+
                 "FROM reservations "+
@@ -390,4 +390,152 @@ public class BookController {
 
 
     }
+
+    public ArrayList<Book> searchBooks(String[] parameters){
+        boolean checkParams = false;
+
+        for(String s:parameters){
+            if(!s.equals("")) checkParams = true;
+        }
+
+        String[] headers = new String[]{
+            "authors.first_name",
+            "authors.last_name",
+            "genres.name",
+            "book_details.title"
+        };
+
+        String query = "SELECT copy_id, " +
+                "book_details.isbn, book_details.title, book_details.release_date," +
+                "book_details.num_copies, " +
+                "authors.first_name, authors.last_name, genres.name, genres.description"+
+                "FROM book_copies"+
+                "JOIN book_details USING(book_id)"+
+                "JOIN authors USING (book_details.author_id)"+
+                "JOIN genres USING (book_details.genre_id)";
+
+        ArrayList<String> params = new ArrayList<>();
+        if(checkParams){
+            query += " WHERE ";
+            for(int i = 0; i< parameters.length-1; i++){
+                if(!parameters[i].equals("")){
+                    query += String.format("%s = ? AND ",headers[i]);
+                    params.add(parameters[i]);
+                }
+
+            }
+            //last entry
+            query += String.format("%s = ? AND ",headers[parameters.length-1]);
+            params.add(parameters[parameters.length-1]);
+        }
+
+        ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
+        ArrayList<Book> retVal = new ArrayList<>();
+        for(ArrayList<String> entry: dbResults){
+            retVal.add(new Book(entry));
+        }
+
+        return retVal;
+    }
+
+    public ArrayList<Reservation> searchReservations(String[] parameters){
+        boolean checkParams = false;
+
+        for(String s:parameters){
+            if(!s.equals("")) checkParams = true;
+        }
+        //afn,aln,title,ufn,uln,
+        String[] headers = new String[]{
+            "authors.first_name",
+            "authors.last_name",
+            "book_details.title",
+            "users.first_name",
+            "users.last_name"
+        };
+
+        String query = "SELECT res_id,book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
+                "authors.last_name, genres.name, genres.description, reservations.user_id,"+
+                "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, date_of_birth "+
+                "FROM reservations "+
+                "JOIN users USING (user_id) "+
+                "JOIN book_details USING (book_id) "+
+                "JOIN authors USING (author_id) "+
+                " JOIN genres USING (genre_id);";
+
+        ArrayList<String> params = new ArrayList<>();
+        if(checkParams){
+            query += " WHERE ";
+            for(int i = 0; i< parameters.length-1; i++){
+                if(!parameters[i].equals("")){
+                    query += String.format("%s = ? AND ",headers[i]);
+                    params.add(parameters[i]);
+                }
+
+            }
+            //last entry
+            query += String.format("%s = ? AND ",headers[parameters.length-1]);
+            params.add(parameters[parameters.length-1]);
+        }
+
+        ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
+        ArrayList<Reservation> retVal = new ArrayList<>();
+        for(ArrayList<String> entry: dbResults){
+            retVal.add(new Reservation(entry));
+        }
+
+        return retVal;
+    }
+
+    public ArrayList<Loan> searchLoans(String[] parameters){
+
+
+        boolean checkParams = false;
+
+        for(String s:parameters){
+            if(!s.equals("")) checkParams = true;
+        }
+        //afn,aln,title,ufn,uln,
+        String[] headers = new String[]{
+                "authors.first_name",
+                "authors.last_name",
+                "book_details.title",
+                "users.first_name",
+                "users.last_name"
+        };
+
+        String query = "SELECT users.user_id, users.username, users.first_name, users.last_name, book_details.book_id, book_details.isbn,"+
+                "book_details.title, authors.first_name, authors.last_name, genres.name, genres.description,"+
+                "book_copies.copy_id, due_date,book_details.release_date"+
+                "FROM loans"+
+                "JOIN users USING (user_id)"+
+                "JOIN book_copies USING (book_id, copy_id)"+
+                "JOIN book_details USING (book_id)"+
+                "JOIN authors USING (author_id)"+
+                "JOIN genres USING (genre_id)";
+
+        ArrayList<String> params = new ArrayList<>();
+        if(checkParams){
+            query += " WHERE ";
+            for(int i = 0; i< parameters.length-1; i++){
+                if(!parameters[i].equals("")){
+                    query += String.format("%s = ? AND ",headers[i]);
+                    params.add(parameters[i]);
+                }
+
+            }
+            //last entry
+            query += String.format("%s = ? AND ",headers[parameters.length-1]);
+            params.add(parameters[parameters.length-1]);
+        }
+
+        ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
+        ArrayList<Loan> retVal = new ArrayList<>();
+        for(ArrayList<String> entry: dbResults){
+            retVal.add(new Loan(entry));
+        }
+
+        return retVal;
+    }
+
+
 }
