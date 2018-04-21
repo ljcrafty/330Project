@@ -99,8 +99,64 @@ public class BookController {
         params.add(userId+"");
 
 
-            ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
-            return new Loan(dbResults.get(0));
+        ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
+        return new Loan(dbResults.get(0));
+    }
+
+    public Loan[] getLoans(int userId)
+    {
+        String query = "SELECT loans.user_id, book_details.book_id, book_details.isbn,"+
+                "book_details.title, authors.first_name, authors.last_name, genres.name, genres.description,"+
+                "book_copies.copy_id, due_date,book_details.release_date"+
+                "FROM loans"+
+                "JOIN book_copies USING (book_id, copy_id)"+
+                "JOIN book_details USING (book_id)"+
+                "JOIN authors USING (author_id)"+
+                "JOIN genres USING (genre_id)"+
+                "WHERE user_id = ?";
+
+        ArrayList<String> params = new ArrayList<>();
+        params.add(userId+"");
+
+        ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
+        
+        if(dbResults == null || dbResults.size() == 0)
+            return new Loan[]{};
+        
+        Loan[] loans = new Loan[dbResults.size()];
+        
+        for( int i = 0; i < dbResults.size(); i++ )
+        {
+            Loan temp = new Loan(dbResults.get(i));
+            loans[i] = temp;
+        }
+
+        return loans;
+    }
+
+    public Reservation[] getReservations(int userId)
+    {
+        String query = "SELECT book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
+                "authors.last_name6, genres.name, genres.description, reservations.user_id,"+
+                "reservations.date_reserved, reservations.user_id"+
+                "FROM reservations"+
+                "JOIN book_details USING (book_id)"+
+                "JOIN authors USING (author_id)"+
+                " JOIN genres USING (genre_id) WHERE user_id = ?;";
+
+        ArrayList<String> params = new ArrayList<>();
+        params.add(userId+"");
+
+        ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
+        Reservation[] ress = new Reservation[dbResults.size()];
+        
+        for( int i = 0; i < dbResults.size(); i++ )
+        {
+            Reservation temp = new Reservation(dbResults.get(i));
+            ress[i] = temp;
+        }
+
+        return ress;
     }
 
     public boolean removeLoan(int bookId, int copyId, int userId){
@@ -117,7 +173,7 @@ public class BookController {
     public ArrayList<Reservation> getAllReservations(){
         String query = "SELECT book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
                 "authors.last_name6, genres.name, genres.description, reservations.user_id,"+
-                "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, age"+
+                "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, date_of_birth"+
                 "FROM reservations"+
                 "JOIN users USING (user_id)"+
                 "JOIN book_details USING (book_id)"+
