@@ -56,12 +56,12 @@ public class BookController {
 
         String query = "SELECT users.user_id, users.username, users.first_name, users.last_name, book_details.book_id, book_details.isbn,"+
                 "book_details.title, authors.first_name, authors.last_name, genres.name, genres.description,"+
-                "book_copies.copy_id, due_date,book_details.release_date"+
-                "FROM loans"+
-                "JOIN users USING (user_id)"+
-                "JOIN book_copies USING (book_id, copy_id)"+
-                "JOIN book_details USING (book_id)"+
-                "JOIN authors USING (author_id)"+
+                "book_copies.copy_id, due_date,book_details.release_date "+
+                "FROM loans "+
+                "JOIN users USING (user_id) "+
+                "JOIN book_copies USING (book_id, copy_id) "+
+                "JOIN book_details USING (book_id) "+
+                "JOIN authors USING (author_id) "+
                 "JOIN genres USING (genre_id)";
 
         if(overdue) query += "WHERE due_date < CURDATE()";
@@ -207,12 +207,12 @@ public class BookController {
     {
         String query = "SELECT book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
                 "authors.last_name6, genres.name, genres.description, reservations.user_id,"+
-                "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, age"+
-                "FROM reservations"+
-                "JOIN users USING (user_id)"+
-                "JOIN book_details USING (book_id)"+
-                "JOIN authors USING (author_id)"+
-                "JOIN genres USING (genre_id)"+
+                "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, age "+
+                "FROM reservations "+
+                "JOIN users USING (user_id) "+
+                "JOIN book_details USING (book_id) "+
+                "JOIN authors USING (author_id) "+
+                "JOIN genres USING (genre_id) "+
                 "WHERE book_details.book_id = ? AND users.user_id = ?;";
 
         ArrayList<String> params = new ArrayList<>();
@@ -281,7 +281,7 @@ public class BookController {
         Calendar currentTime = Calendar.getInstance();
 
 
-        String query =  "INSERT into RESERVATIONS(book_id,user_id, date_reserved)"+
+        String query =  "INSERT into RESERVATIONS(book_id,user_id, date_reserved) "+
                         "VALUES(?,?,?)";
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -376,7 +376,7 @@ public class BookController {
         return check;
     }
 
-    private int getBookDetailId(Book book){
+    public int getBookDetailId(Book book){
         String query = "SELECT book_id FROM book_details WHERE isbn = ? AND title = ?";
 
         ArrayList<String> params = new ArrayList<>();

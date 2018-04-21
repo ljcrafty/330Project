@@ -48,6 +48,14 @@ public class Listener implements ActionListener
                         addBook(e);
                         break;
 
+                  case "reserve":
+                        reserve(e);
+                        break;
+
+                  case "loan":
+                        loan(e);
+                        break;
+
                   case "Login":
                         login(e);            
                         break;
@@ -152,6 +160,32 @@ public class Listener implements ActionListener
             }
       }
 
+      private void reserve(ActionEvent e)
+      {
+            String[] data = this.getMainCont().getData();
+            Book book = new Book( data[1], "", "", "", "", 0, data[2] );
+            int id = bc.getBookDetailId(book);
+            BookDetails details = bdc.getABook(id);
+
+            if( bc.placeReservation( details, this.userId ) )
+            {
+                  //TODO: redirect to search results
+            }
+            else
+            {
+                  error("Your reservation could not be added", "Error");
+            }
+      }
+
+      private void loan(ActionEvent e, int userId)
+      {
+            //from search, include userId
+            if(userId == 0)
+            {
+                  //use this.userId
+            }
+      }
+
       private void loans(ActionEvent e, String type)
       {
             LoansView lv = new LoansView(type);
@@ -160,7 +194,6 @@ public class Listener implements ActionListener
             if(type == "loans")
             {
                   Loan[] loans = bc.getLoans(this.userId);
-                  System.out.println(loans.length);
                   lv.setData(loans);
             }
             else

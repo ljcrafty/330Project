@@ -117,7 +117,9 @@ public class BookView implements View
     public String[] getData()
     {
         return new String[]{
-            Integer.toString(book.getId())
+            Integer.toString(book.getId()),
+            book.getTitle(),
+            book.getISBN()
         };
     }
 
