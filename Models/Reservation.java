@@ -24,7 +24,7 @@ public class Reservation {
         int day = Integer.parseInt( date.split("-")[2] );
         temp.set( yr, mo, day ); //YYYY-MM-DD
 
-        this.book = new BookDetails(Integer.parseInt(dbResult.get(0)),Integer.parseInt(dbResult.get(1)),Integer.parseInt(dbResult.get(4)),dbResult.get(2),dbResult.get(5),dbResult.get(6),dbResult.get(7),temp);
+        this.book = new BookDetails(Integer.parseInt(dbResult.get(0)),dbResult.get(1),Integer.parseInt(dbResult.get(4)),dbResult.get(2),dbResult.get(5),dbResult.get(6),dbResult.get(7),temp);
     }
 
     public int getUserId(){

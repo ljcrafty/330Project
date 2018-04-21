@@ -64,7 +64,7 @@ public class Book
         this.genre_name = genre.getName();
         this.genre_desc = genre.getDescription();
         this.id = id;
-        this.isbn = bookDetails.getIsbn();
+        this.isbn = Integer.parseInt(bookDetails.getIsbn());
         this.release_date = bookDetails.getReleaseDate();
         this.due_date = null;
     }
