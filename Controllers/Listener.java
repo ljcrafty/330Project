@@ -55,11 +55,15 @@ public class Listener implements ActionListener
                         break;
 
                   case "loan":
-                        loan(e);
+                        loan(e, 0);
                         break;
 
                   case "Login":
                         login(e);            
+                        break;
+
+                  case "Next":
+                        details(e);            
                         break;
                   
                   case "Register":
@@ -164,10 +168,31 @@ public class Listener implements ActionListener
             }
       }
 
+      private void details(ActionEvent e)
+      {
+            String[] data = this.getMainCont(e).getData();
+            String type = data[0];
+
+            switch(type)
+            {
+                  case "Book":
+                        //Book book = bc.getABook(data[1]);
+                        //BookView bv = new BookView(book, role);
+                        //show(bv, e);
+                        break;
+
+                  case "User":
+                        User user = uc.getUser(Integer.parseInt(data[1]));
+                        ProfileView pv = new ProfileView(user, false);
+                        show(pv, e);
+                        break;
+            }
+      }
+
       private void reserve(ActionEvent e)
       {
-            String[] data = this.getMainCont().getData();
-            Book book = new Book( data[1], "", "", "", "", 0, data[2] );
+            String[] data = this.getMainCont(e).getData();
+            Book book = new Book( data[1], "", "", "", "", 0, Long.parseLong(data[2]), Calendar.getInstance() );
             int id = bc.getBookDetailId(book);
             BookDetails details = bdc.getABook(id);
 

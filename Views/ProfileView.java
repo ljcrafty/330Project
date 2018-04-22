@@ -14,16 +14,26 @@ public class ProfileView implements View
     private JButton edit, save = new JButton(), cancel = new JButton(), cancelEdit;
     private ActionListener listener;
     private JPanel view = new JPanel();
-    private boolean isEdit;
+    private boolean isEdit, canEdit;
 
     public ProfileView()
     {
         this.isEdit = false;
+        this.canEdit = true;
         this.view.setLayout( new GridLayout(0, 2, 9, 8) );
     }
 
     public ProfileView( User user )
     {
+        this.isEdit = false;
+        this.canEdit = true;
+        this.view.setLayout( new GridLayout(0, 2, 9, 8) );
+        this.setData( new Object[]{user} );
+    }
+
+    public ProfileView( User user, boolean edit )
+    {
+        this.canEdit = edit;
         this.isEdit = false;
         this.view.setLayout( new GridLayout(0, 2, 9, 8) );
         this.setData( new Object[]{user} );
@@ -186,20 +196,22 @@ public class ProfileView implements View
 
         this.view.add(lbl);
         this.view.add(lrole);
-
-        //buttons
-        cancel = new JButton("Cancel");
-        cancel.setActionCommand("home");
-        cancel.addActionListener(this.listener);
-        edit = new JButton( new AbstractAction("Edit") {
-            public void actionPerformed(ActionEvent e) {
-                setEdit(true);
-            }
-        });
         
+        if(this.canEdit)
+        {
+            //buttons
+            cancel = new JButton("Cancel");
+            cancel.setActionCommand("home");
+            cancel.addActionListener(this.listener);
+            this.view.add(cancel);
 
-        this.view.add(cancel);
-        this.view.add(edit);
+            edit = new JButton( new AbstractAction("Edit") {
+                public void actionPerformed(ActionEvent e) {
+                    setEdit(true);
+                }
+            });
+            this.view.add(edit);
+        }
     }
 
     private String[] getDate()

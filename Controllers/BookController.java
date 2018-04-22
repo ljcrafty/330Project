@@ -333,7 +333,7 @@ public class BookController {
     }
 
 
-    public Book getABook(Book id){
+    public Book getABook(BookDetails book, int id){
         String query = "SELECT copy_id, " +
                 "book_details.isbn, book_details.title, book_details.release_date," +
                 "book_details.num_copies, " +
@@ -342,10 +342,11 @@ public class BookController {
                 "JOIN book_details USING(book_id)"+
                 "JOIN authors USING (book_details.author_id)"+
                 "JOIN genres USING (book_details.genre_id)"+
-                "WHERE copy_id = ?";
+                "WHERE copy_id = ? AND book_id = ?";
 
         ArrayList<String> params = new ArrayList<>();
         params.add(id+"");
+        params.add(book.getBook_id()+"");
 
 
             ArrayList<ArrayList<String>> results = dbController.getData(query,params);

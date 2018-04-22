@@ -49,7 +49,6 @@ public class CollectionOverview implements View, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-
         Entry entry = (Entry)(((JButton)e.getSource()).getParent());
 
         if(selectedId == 0) {
@@ -70,8 +69,6 @@ public class CollectionOverview implements View, ActionListener {
             selectedId = 0;
             this.selected.setText("Selected: none");
         }
-
-
     }
 
     @Override
@@ -99,7 +96,7 @@ public class CollectionOverview implements View, ActionListener {
 
     @Override
     public String[] getData() {
-        return new String[]{selectedId+""};
+        return new String[]{type, selectedId+""};
     }
 
     @Override
@@ -178,7 +175,7 @@ public class CollectionOverview implements View, ActionListener {
 
         private void addUserData(User user){
             entryId = user.getId();
-
+            title = user.getUsername();
 
             this.data.add(new JLabel(user.getId()+""));
             this.data.add(new JLabel(user.getFName() + " " + user.getLName()));
@@ -188,6 +185,7 @@ public class CollectionOverview implements View, ActionListener {
 
         private void addLoanData(Loan loan){
             entryId = loan.getId();
+            title = loan.getUserId() + "";
 
             data.add(new JLabel(loan.getBook().getTitle()));
             data.add(new JLabel(loan.getBook().getAuthorFName()+" "+loan.getBook().getAuthorLName()));
@@ -199,6 +197,7 @@ public class CollectionOverview implements View, ActionListener {
 
         private void addReservationData(Reservation reservation){
             entryId = reservation.getId();
+            title = reservation.getUserId() + "";
 
             data.add(new JLabel(reservation.getUser().getFName()+ " " + reservation.getUser().getLName()));
             data.add(new JLabel(reservation.getBook().getTitle()));
