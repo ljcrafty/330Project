@@ -19,7 +19,7 @@ public class MainView implements View
         {
             case "librarian":
                String[] labelNames = {" My Profile", " Find Book"," Search for a User",
-                  " Check Overdue Loans", " My Loaned Books", " My Reservations", 
+                  " Check Overdue Loans", " Search Reservations", " My Loaned Books", " My Reservations",
                   " Add a Book", " Add a User"};
 
                getPanel( labelNames );

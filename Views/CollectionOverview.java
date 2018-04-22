@@ -199,7 +199,11 @@ public class CollectionOverview implements View, ActionListener {
             entryId = reservation.getId();
             title = reservation.getUserId() + "";
 
-            data.add(new JLabel(reservation.getUser().getFName()+ " " + reservation.getUser().getLName()));
+            int userId = reservation.getUserId();
+            User u = Injector.getUser().getUser(userId);
+            String userFullName = u.getFName() + " " + u.getLName();
+
+            data.add(new JLabel(userFullName));
             data.add(new JLabel(reservation.getBook().getTitle()));
             data.add(new JLabel(reservation.getBook().getfName()+ " "+ reservation.getBook().getlName()));
             select = new JButton();

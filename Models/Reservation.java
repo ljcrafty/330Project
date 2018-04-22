@@ -20,7 +20,7 @@ public class Reservation {
     public Reservation(ArrayList<String> dbResult){
         this.id = Integer.parseInt(dbResult.get(0));
         Calendar temp = Calendar.getInstance();
-        String date = dbResult.get(3).split( " " )[1];
+        String date = dbResult.get(4).split( " " )[0];
         int yr = Integer.parseInt( date.split("-")[0] );
         int mo = Integer.parseInt( date.split("-")[1] ) - 1;
         int day = Integer.parseInt( date.split("-")[2] );
@@ -29,7 +29,7 @@ public class Reservation {
         this.book = new BookDetails(Integer.parseInt(dbResult.get(0)),Long.parseLong(dbResult.get(2)),Integer.parseInt(dbResult.get(5)),dbResult.get(3),dbResult.get(6),dbResult.get(7),dbResult.get(8),temp);
     
         Calendar resDate = Calendar.getInstance();
-        String da = dbResult.get(10).split( " " )[1];
+        String da = dbResult.get(11).split( " " )[0];
         yr = Integer.parseInt( da.split("-")[0] );
         mo = Integer.parseInt( da.split("-")[1] ) - 1;
         day = Integer.parseInt( da.split("-")[2] );

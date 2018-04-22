@@ -32,8 +32,24 @@ public class MainContainer extends JFrame {
                 goBack();
             }
         });
+
+        JMenuItem logout = new JMenuItem("Logout");
+        logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (previous.size() > 0) {
+                    backClicked = true;
+                    ((LoginView)previous.get(0)).setData(null);
+                    addView(previous.get(0));
+
+                    previous.clear();
+                }
+            }
+        });
+
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(back);
+        menuBar.add(logout);
 
         this.setJMenuBar(menuBar);
 

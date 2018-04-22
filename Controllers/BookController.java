@@ -62,7 +62,7 @@ public class BookController {
                 "JOIN book_copies USING (book_id, copy_id) "+
                 "JOIN book_details USING (book_id) "+
                 "JOIN authors USING (author_id) "+
-                "JOIN genres USING (genre_id)";
+                "JOIN genres USING (genre_id) ";
 
         if(overdue) query += "WHERE due_date < CURDATE()";
 

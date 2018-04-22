@@ -62,6 +62,7 @@ public class LoginView implements View {
     }
 
     public void setData(Object[] models){
-
+        username.setText("");
+        password.setText("");
     }
 }
