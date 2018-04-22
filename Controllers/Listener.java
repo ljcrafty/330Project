@@ -14,6 +14,7 @@ public class Listener implements ActionListener
       private AuthorController ac;
       private GenreController gc;
       private BookController bc;
+      private Book bookToLoan;
       private String token;
       private int userId;
       private int userRole;
@@ -39,6 +40,7 @@ public class Listener implements ActionListener
                         break;
                   
                   case "home":
+                        bookToLoan = null;
                         home(e);
                         break;
 
@@ -54,16 +56,29 @@ public class Listener implements ActionListener
                         reserve(e);
                         break;
 
-                  case "loan":
-                        loan(e, 0);
-                        break;
+                  case "loan search":
+                  {
+                        String[] data = this.getMainCont(e).getData();
+                        bookToLoan = new Book( data[1], "", "", "", "", Integer.parseInt(data[0]), 
+                              Long.parseLong(data[2]), Calendar.getInstance() );
 
+                        View search = new SearchView("User",userRole);
+                        show(search,e);
+                        break;
+                  }
                   case "Login":
                         login(e);            
                         break;
 
                   case "Next":
-                        details(e);            
+                        if( this.bookToLoan == null )
+                              details(e);
+                        else
+                        {
+                              this.loan(e);
+                              bookToLoan = null;
+                        }
+                                 
                         break;
                   
                   case "Register":
@@ -79,10 +94,10 @@ public class Listener implements ActionListener
                         break;
                         
                   case " Find Book":{
+                        bookToLoan = null;
                         View search = new SearchView("Book",userRole);
                         show(search,e);
                   }break;
-
                   
                   case " My Loaned Books":
                         loans(e, "loans");
@@ -222,7 +237,7 @@ public class Listener implements ActionListener
 
             if( bc.placeReservation( details, this.userId ) )
             {
-                  //TODO: redirect to search results
+                  this.getMainCont(e).goBack();
             }
             else
             {
@@ -230,12 +245,18 @@ public class Listener implements ActionListener
             }
       }
 
-      private void loan(ActionEvent e, int userId)
+      private void loan(ActionEvent e)
       {
             //from search, include userId
-            if(userId == 0)
+            String[] data = this.getMainCont(e).getData();
+
+            if( bc.loanBook( bookToLoan, Integer.parseInt(data[1])) )
             {
-                  //use this.userId
+                  home(e);
+            }
+            else
+            {
+                  error("The loan could not be completed at this time", "Error");
             }
       }
 

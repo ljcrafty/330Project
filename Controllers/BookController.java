@@ -240,7 +240,7 @@ public class BookController {
         dueDate.setTimeInMillis(14 * 86400000);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String timestamp = dateFormat.format(dueDate);
+        String timestamp = dateFormat.format(dueDate.getTime());
 
         String query = "INSERT INTO loans(book_id,copy_id,user_id,due_date) VALUES(?,?,?,?);";
 

@@ -90,7 +90,7 @@ public class MainContainer extends JFrame {
         return currentView.getData();
     }
 
-    private void goBack(){
+    public void goBack(){
         if(previous.size() > 1) {
             backClicked = true;
             View prev = previous.remove(previous.size() - 1);

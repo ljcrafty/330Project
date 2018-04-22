@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 
 public class CollectionOverview implements View, ActionListener {
 
@@ -40,8 +41,13 @@ public class CollectionOverview implements View, ActionListener {
         buttons.setLayout(new FlowLayout());
         selected = new JLabel("Selected: none");
         buttons.add(selected);
-        next = new JButton("Next");
-        buttons.add(next);
+        
+        if(type != "Loan" && type != "Reservation")
+        {
+            next = new JButton("Next");
+            buttons.add(next);
+        }
+        
         view.add(buttons,BorderLayout.SOUTH);
     }
 
@@ -207,18 +213,20 @@ public class CollectionOverview implements View, ActionListener {
         private void addLoanData(Loan loan){
             entryId = loan.getId();
             title = loan.getUserId() + "";
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
             data.add(new JLabel(loan.getBook().getTitle()));
             data.add(new JLabel(loan.getBook().getAuthorFName()+" "+loan.getBook().getAuthorLName()));
+            data.add( new JLabel(format.format(loan.getDueDate())) );
 
             User temp = Injector.getUser().getUser(loan.getUserId());
             data.add(new JLabel(temp.getFName()+temp.getLName()));
-            select = new JButton("Select");
         }
 
         private void addReservationData(Reservation reservation){
             entryId = reservation.getId();
             title = reservation.getUserId() + "";
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
             int userId = reservation.getUserId();
             User u = Injector.getUser().getUser(userId);
@@ -227,7 +235,7 @@ public class CollectionOverview implements View, ActionListener {
             data.add(new JLabel(userFullName));
             data.add(new JLabel(reservation.getBook().getTitle()));
             data.add(new JLabel(reservation.getBook().getfName()+ " "+ reservation.getBook().getlName()));
-            select = new JButton();
+            data.add( new JLabel(format.format(reservation.getDateReserved())) );
 
         }
 

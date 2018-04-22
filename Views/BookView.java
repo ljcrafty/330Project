@@ -51,7 +51,7 @@ public class BookView implements View
 
         if( this.canLoan )
         {
-            loan.setActionCommand("loan");
+            loan.setActionCommand("loan search");
             this.view.add(loan);
         }
         else
