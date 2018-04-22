@@ -207,8 +207,8 @@ public class UserController {
     public ArrayList<User> searchUsers(String[] parameters){
         boolean checkParams = false;
 
-        for(String s:parameters){
-            if(!s.equals("")) checkParams = true;
+        for(int i = 1; i< parameters.length; i++){
+            if(!parameters[i].equals("")) checkParams = true;
         }
         //fn,ln,uid,username
         String[] headers = new String[]{
@@ -219,22 +219,27 @@ public class UserController {
         };
 
         String query = "SELECT user_id, username, password, first_name, last_name, date_of_birth, role_id " +
-                "FROM users JOIN user_role USING (user_id);";
+                "FROM users JOIN user_role USING (user_id)";
 
 
         ArrayList<String> params = new ArrayList<>();
         if(checkParams){
             query += " WHERE ";
-            for(int i = 0; i< parameters.length-1; i++){
+            for(int i = 1; i< parameters.length-1; i++){
                 if(!parameters[i].equals("")){
-                    query += String.format("%s = ? AND ",headers[i]);
+                    query += String.format("%s = ? AND ",headers[i-1]);
                     params.add(parameters[i]);
                 }
 
             }
             //last entry
-            query += String.format("%s = ? AND ",headers[parameters.length-1]);
-            params.add(parameters[parameters.length-1]);
+            if(!parameters[parameters.length-1].equals("")) {
+                query += String.format("%s = ?;", headers[headers.length - 1]);
+                params.add(parameters[parameters.length - 1]);
+            }
+            else {
+                query = query.substring(0,query.length()-4);
+            }
         }
 
         ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);

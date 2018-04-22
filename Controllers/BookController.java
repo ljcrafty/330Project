@@ -394,8 +394,8 @@ public class BookController {
     public ArrayList<Book> searchBooks(String[] parameters){
         boolean checkParams = false;
 
-        for(String s:parameters){
-            if(!s.equals("")) checkParams = true;
+        for(int i = 1; i< parameters.length; i++){
+            if(!parameters[i].equals("")) checkParams = true;
         }
 
         String[] headers = new String[]{
@@ -408,25 +408,30 @@ public class BookController {
         String query = "SELECT copy_id, " +
                 "book_details.isbn, book_details.title, book_details.release_date," +
                 "book_details.num_copies, " +
-                "authors.first_name, authors.last_name, genres.name, genres.description"+
-                "FROM book_copies"+
-                "JOIN book_details USING(book_id)"+
-                "JOIN authors USING (book_details.author_id)"+
-                "JOIN genres USING (book_details.genre_id)";
+                "authors.first_name, authors.last_name, genres.name, genres.description "+
+                "FROM book_copies "+
+                "JOIN book_details USING(book_id) "+
+                "JOIN authors USING (author_id) "+
+                "JOIN genres USING (genre_id) ";
 
         ArrayList<String> params = new ArrayList<>();
         if(checkParams){
             query += " WHERE ";
-            for(int i = 0; i< parameters.length-1; i++){
+            for(int i = 1; i< parameters.length-1; i++){
                 if(!parameters[i].equals("")){
-                    query += String.format("%s = ? AND ",headers[i]);
+                    query += String.format("%s = ? AND ",headers[i-1]);
                     params.add(parameters[i]);
                 }
 
             }
             //last entry
-            query += String.format("%s = ? AND ",headers[parameters.length-1]);
-            params.add(parameters[parameters.length-1]);
+            if(!parameters[parameters.length-1].equals("")) {
+                query += String.format("%s = ?;", headers[headers.length - 1]);
+                params.add(parameters[parameters.length - 1]);
+            }
+            else {
+                query = query.substring(0,query.length()-4);
+            }
         }
 
         ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
@@ -441,8 +446,8 @@ public class BookController {
     public ArrayList<Reservation> searchReservations(String[] parameters){
         boolean checkParams = false;
 
-        for(String s:parameters){
-            if(!s.equals("")) checkParams = true;
+        for(int i = 1; i< parameters.length; i++){
+            if(!parameters[i].equals("")) checkParams = true;
         }
         //afn,aln,title,ufn,uln,
         String[] headers = new String[]{
@@ -460,21 +465,26 @@ public class BookController {
                 "JOIN users USING (user_id) "+
                 "JOIN book_details USING (book_id) "+
                 "JOIN authors USING (author_id) "+
-                " JOIN genres USING (genre_id);";
+                " JOIN genres USING (genre_id)";
 
         ArrayList<String> params = new ArrayList<>();
         if(checkParams){
             query += " WHERE ";
-            for(int i = 0; i< parameters.length-1; i++){
+            for(int i = 1; i< parameters.length-1; i++){
                 if(!parameters[i].equals("")){
-                    query += String.format("%s = ? AND ",headers[i]);
+                    query += String.format("%s = ? AND ",headers[i-1]);
                     params.add(parameters[i]);
                 }
 
             }
             //last entry
-            query += String.format("%s = ? AND ",headers[parameters.length-1]);
-            params.add(parameters[parameters.length-1]);
+            if(!parameters[parameters.length-1].equals("")) {
+                query += String.format("%s = ?;", headers[headers.length - 1]);
+                params.add(parameters[parameters.length - 1]);
+            }
+            else {
+                query = query.substring(0,query.length()-4);
+            }
         }
 
         ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
@@ -490,9 +500,8 @@ public class BookController {
 
 
         boolean checkParams = false;
-
-        for(String s:parameters){
-            if(!s.equals("")) checkParams = true;
+        for(int i = 1; i< parameters.length; i++){
+            if(!parameters[i].equals("")) checkParams = true;
         }
         //afn,aln,title,ufn,uln,
         String[] headers = new String[]{
@@ -505,27 +514,32 @@ public class BookController {
 
         String query = "SELECT users.user_id, users.username, users.first_name, users.last_name, book_details.book_id, book_details.isbn,"+
                 "book_details.title, authors.first_name, authors.last_name, genres.name, genres.description,"+
-                "book_copies.copy_id, due_date,book_details.release_date"+
-                "FROM loans"+
-                "JOIN users USING (user_id)"+
-                "JOIN book_copies USING (book_id, copy_id)"+
-                "JOIN book_details USING (book_id)"+
-                "JOIN authors USING (author_id)"+
-                "JOIN genres USING (genre_id)";
+                "book_copies.copy_id, due_date,book_details.release_date "+
+                "FROM loans "+
+                "JOIN users USING (user_id) "+
+                "JOIN book_copies USING (book_id, copy_id) "+
+                "JOIN book_details USING (book_id) "+
+                "JOIN authors USING (author_id) "+
+                "JOIN genres USING (genre_id) ";
 
         ArrayList<String> params = new ArrayList<>();
         if(checkParams){
             query += " WHERE ";
-            for(int i = 0; i< parameters.length-1; i++){
+            for(int i = 1; i< parameters.length-1; i++){
                 if(!parameters[i].equals("")){
-                    query += String.format("%s = ? AND ",headers[i]);
+                    query += String.format("%s = ? AND ",headers[i-1]);
                     params.add(parameters[i]);
                 }
 
             }
             //last entry
-            query += String.format("%s = ? AND ",headers[parameters.length-1]);
-            params.add(parameters[parameters.length-1]);
+            if(!parameters[parameters.length-1].equals("")) {
+                query += String.format("%s = ?;", headers[headers.length - 1]);
+                params.add(parameters[parameters.length - 1]);
+            }
+            else {
+                query = query.substring(0,query.length()-4);
+            }
         }
 
         ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);

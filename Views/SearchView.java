@@ -171,7 +171,7 @@ public class SearchView implements View{
                     String name = genre.getName();
                     target.addItem(name);
                 }
-            }
+            }break;
 
             case "user":{
                 UserController uc = Injector.getUser();
@@ -181,7 +181,7 @@ public class SearchView implements View{
                     String name = user.getFName() + " " + user.getLName();
                     target.addItem(name);
                 }
-            }
+            }break;
         }
 
 

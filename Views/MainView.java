@@ -18,8 +18,7 @@ public class MainView implements View
         switch( type )
         {
             case "librarian":
-               String[] labelNames = {" My Profile", " Search By Author", 
-                  " Search By Title", " Search By Genre", " Search for a User",
+               String[] labelNames = {" My Profile", " Find Book"," Search for a User",
                   " Check Overdue Loans", " My Loaned Books", " My Reservations", 
                   " Add a Book", " Add a User"};
 
@@ -27,8 +26,7 @@ public class MainView implements View
                break;
                
             default:
-               String[] labels = {" My Profile", " Search By Author", 
-                  " Search By Title", " Search By Genre", " My Loaned Books", 
+               String[] labels = {" My Profile", " Find Book", " My Loaned Books",
                   " My Reservations"};
             
                getPanel( labels );
