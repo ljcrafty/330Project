@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class CollectionOverview implements View, ActionListener {
 
     private JPanel view;
-    private String title, type;
+    private String title, type, bookTitle, bookISBN;
     private int selectedId;             //selected book id
     private JScrollPane book_collection;
     private JLabel selected;
@@ -55,6 +55,12 @@ public class CollectionOverview implements View, ActionListener {
             selectedId = entry.getSelected();
             entry.select();
             this.selected.setText("Selected: " + entry.title);
+
+            if(this.type == "Book")
+            {
+                this.bookTitle = entry.title;
+                this.bookISBN = entry.getData().get(3).getText();
+            }
         }
         else if(selectedId != entry.getSelected()){
             for(Entry temp: collection){
@@ -63,11 +69,23 @@ public class CollectionOverview implements View, ActionListener {
             selectedId = entry.getSelected();
             entry.select();
             this.selected.setText("Selected: " + entry.title);
+
+            if(this.type == "Book")
+            {
+                this.bookTitle = entry.title;
+                this.bookISBN = entry.getData().get(3).getText();
+            }
         }
         else {
             entry.deselect();
             selectedId = 0;
             this.selected.setText("Selected: none");
+
+            if(this.type == "Book")
+            {
+                this.bookTitle = "";
+                this.bookISBN = "";
+            }
         }
     }
 
@@ -96,6 +114,9 @@ public class CollectionOverview implements View, ActionListener {
 
     @Override
     public String[] getData() {
+        if(this.type == "Book")
+            return new String[]{type, selectedId+"", this.bookTitle, this.bookISBN};
+
         return new String[]{type, selectedId+""};
     }
 
@@ -218,6 +239,11 @@ public class CollectionOverview implements View, ActionListener {
         public void registerInternalListeners(ActionListener listener){
             select.addActionListener(listener);
 
+        }
+
+        public ArrayList<JLabel> getData()
+        {
+            return this.data;
         }
 
         public int getSelected(){

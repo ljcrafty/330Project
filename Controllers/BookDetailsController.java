@@ -14,9 +14,9 @@ public class BookDetailsController {
 
     public ArrayList<BookDetails> getAllBooks(){
         String query = "SELECT book_id, isbn, title, release_date, num_copies, authors.first_name,"+
-                "authors.last_name, genres.name, genres.description"+
-                "FROM book_details"+
-                "JOIN authors USING (author_id)"+
+                "authors.last_name, genres.name, genres.description "+
+                "FROM book_details "+
+                "JOIN authors USING (author_id) "+
                 "JOIN genres USING (genre_id)";
 
             ArrayList<ArrayList<String>> result = dbController.getData(query,new ArrayList<String>());
@@ -32,20 +32,24 @@ public class BookDetailsController {
 
     public BookDetails getABook(int id){
         String query = "SELECT book_id, isbn, title, release_date, num_copies, authors.first_name,"+
-                       "authors.last_name, genres.name, genres.description"+
-                       "FROM book_details"+
-                       "JOIN authors USING (author_id)"+
-                       "JOIN genres USING (genre_id)"+
+                       "authors.last_name, genres.name, genres.description "+
+                       "FROM book_details "+
+                       "JOIN authors USING (author_id) "+
+                       "JOIN genres USING (genre_id) "+
                        "WHERE book_id = ?";
 
         ArrayList<String> params = new ArrayList<>();
         params.add(id+"");
 
 
-            ArrayList<ArrayList<String>> result = dbController.getData(query,params);
+        ArrayList<ArrayList<String>> result = dbController.getData(query,params);
 
-            return new BookDetails(result.get(0));
+        if( result == null || result.size() == 0 )
+        {
+            return null;
+        }
 
+        return new BookDetails(result.get(0));
     }
 
 
@@ -62,18 +66,47 @@ public class BookDetailsController {
             return false;
         }
 
-        query = "INSERT INTO book_details(book_id, isbn,title,release_date,num_copies,author_id,genre_id)"+
-                 "VALUES(?,?,?,?,?,?,?)";
+        try
+        {
+            dbController.startTrans();
 
-        ArrayList<String> params = new ArrayList<>();
-        params.add( Integer.toString(num) );
-        params.add( Long.toString(bookDetails.getIsbn()) );
-        params.add(bookDetails.getTitle());
-        params.add( format.format(bookDetails.getReleaseDate().getTime()) );
-        params.add(bookDetails.getNumCopies()+"");
-        params.add(authorId+"");
-        params.add(genreId+"");
+            query = "INSERT INTO book_details(book_id, isbn,title,release_date,num_copies,author_id,genre_id)"+
+                    "VALUES(?,?,?,?,?,?,?)";
 
-        return dbController.setData(query,params);
+            ArrayList<String> params = new ArrayList<>();
+            params.add( Integer.toString(num) );
+            params.add( Long.toString(bookDetails.getIsbn()) );
+            params.add(bookDetails.getTitle());
+            params.add( format.format(bookDetails.getReleaseDate().getTime()) );
+            params.add(bookDetails.getNumCopies()+"");
+            params.add(authorId+"");
+            params.add(genreId+"");
+
+            if(dbController.setData(query,params))
+            {
+                for( int i = 1; i <= bookDetails.getNumCopies(); i++ )
+                {
+                    query = "INSERT INTO book_copies(book_id, copy_id) VALUES(?, ?)";
+                    params = new ArrayList<String>();
+                    params.add( Integer.toString(num) );
+                    params.add( Integer.toString(i) );
+
+                    if( !dbController.setData(query,params) )
+                    {
+                        dbController.rollbackTrans();
+                        return false;
+                    }
+                }
+                dbController.endTrans();
+                return true;
+            }
+            
+            dbController.rollbackTrans();
+            return false;
+        }
+        catch( DLException e )
+        {
+            return false;
+        }
     }
 }

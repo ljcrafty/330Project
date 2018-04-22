@@ -47,6 +47,18 @@ public class BookView implements View
         this.view.add(lbl);
 
         //buttons
+        loan = new JButton("Loan");
+
+        if( this.canLoan )
+        {
+            loan.setActionCommand("loan");
+            this.view.add(loan);
+        }
+        else
+        {
+            this.view.add(new JLabel(""));
+        }
+
         cancel = new JButton("Cancel");
         cancel.setActionCommand("home");
 
@@ -55,15 +67,6 @@ public class BookView implements View
 
         this.view.add(cancel);
         this.view.add(reserve);
-        
-
-        if( this.canLoan )
-        {
-            loan = new JButton("Loan");
-            loan.setActionCommand("loan");
-
-            this.view.add(loan);
-        }
     }
 
     /**
@@ -119,7 +122,7 @@ public class BookView implements View
         return new String[]{
             Integer.toString(book.getId()),
             book.getTitle(),
-            book.getISBN()
+            book.getISBN() + ""
         };
     }
 

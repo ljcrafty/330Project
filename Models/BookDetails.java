@@ -36,21 +36,22 @@ public class BookDetails {
     public BookDetails(ArrayList<String> data){
         this.book_id = Integer.parseInt(data.get(0));
         this.isbn = Long.parseLong(data.get(1));
+        this.title = data.get(2);
 
         Calendar temp = Calendar.getInstance();
-        String date = data.get(2).split( " " )[0];
+        String date = data.get(3).split( " " )[0];
         int yr = Integer.parseInt( date.split("-")[0] );
         int mo = Integer.parseInt( date.split("-")[1] ) - 1;
         int day = Integer.parseInt( date.split("-")[2] );
         temp.set( yr, mo, day ); //YYYY-MM-DD
         this.releaseDate = temp;
 
-        this.numCopies = Integer.parseInt(data.get(3));
+        this.numCopies = Integer.parseInt(data.get(4));
 
-        this.fName = data.get(4);
-        this.lName = data.get(5);
+        this.fName = data.get(5);
+        this.lName = data.get(6);
 
-        this.genre = data.get(6);
+        this.genre = data.get(7);
     }
 
     public int getBook_id() {

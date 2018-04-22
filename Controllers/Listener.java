@@ -176,9 +176,12 @@ public class Listener implements ActionListener
             switch(type)
             {
                   case "Book":
-                        //Book book = bc.getABook(data[1]);
-                        //BookView bv = new BookView(book, role);
-                        //show(bv, e);
+                        Book book = new Book( data[2], "", "", "", "", Integer.parseInt(data[1]), 
+                              Long.parseLong(data[3]), Calendar.getInstance() );
+                        int bdId = bc.getBookDetailId(book);
+                        Book realBook = bc.getABook(book, bdId);
+                        BookView bv = new BookView(realBook, this.userRole);
+                        show(bv, e);
                         break;
 
                   case "User":
@@ -390,12 +393,12 @@ public class Listener implements ActionListener
                   if( uc.authenticate(token, 1) )
                   {
                         show( new MainView("librarian"), e );
-                        userRole = 1;
+                        userRole = 2;
                   }
                   else
                   {
                         show( new MainView("user"), e );
-                        userRole = 2;
+                        userRole = 1;
                   }
             }
             else //failed login, give error

@@ -86,7 +86,7 @@ CREATE TABLE loans(
 );
 
 CREATE TABLE reservations(
-    res_id int,
+    res_id int AUTO_INCREMENT,
     book_id int,
     user_id int,
     date_reserved date,

@@ -178,7 +178,7 @@ public class BookController {
 
     public ArrayList<Reservation> getAllReservations(){
         String query = "SELECT res_id,book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
-                "authors.last_name6, genres.name, genres.description, reservations.user_id,"+
+                "authors.last_name, genres.name, genres.description, reservations.user_id,"+
                 "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, date_of_birth "+
                 "FROM reservations "+
                 "JOIN users USING (user_id) "+
@@ -206,7 +206,7 @@ public class BookController {
     public Reservation getReservationDetail(BookDetails details, int userId)
     {
         String query = "SELECT res_id,book_details.book_id, book_details.isbn, book_details.title, book_details.release_date, book_details.num_copies, authors.first_name,"+
-                "authors.last_name6, genres.name, genres.description, reservations.user_id,"+
+                "authors.last_name, genres.name, genres.description, reservations.user_id,"+
                 "reservations.date_reserved, users.user_id, users.username, users.first_name, users.last_name, age "+
                 "FROM reservations "+
                 "JOIN users USING (user_id) "+
@@ -281,7 +281,7 @@ public class BookController {
         Calendar currentTime = Calendar.getInstance();
 
 
-        String query =  "INSERT into RESERVATIONS(book_id,user_id, date_reserved) "+
+        String query =  "INSERT INTO reservations(book_id,user_id, date_reserved) "+
                         "VALUES(?,?,?)";
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -333,27 +333,26 @@ public class BookController {
     }
 
 
-    public Book getABook(BookDetails book, int id){
+    public Book getABook(Book book, int id){
         String query = "SELECT copy_id, " +
                 "book_details.isbn, book_details.title, book_details.release_date," +
-                "book_details.num_copies, " +
-                "authors.first_name, authors.last_name, genres.name, genres.description"+
-                "FROM book_copies"+
-                "JOIN book_details USING(book_id)"+
-                "JOIN authors USING (book_details.author_id)"+
-                "JOIN genres USING (book_details.genre_id)"+
+                "authors.first_name, authors.last_name, genres.name, genres.description "+
+                "FROM book_copies "+
+                "JOIN book_details USING(book_id) "+
+                "JOIN authors USING (author_id) "+
+                "JOIN genres USING (genre_id) "+
                 "WHERE copy_id = ? AND book_id = ?";
 
         ArrayList<String> params = new ArrayList<>();
+        params.add(book.getId()+"");
         params.add(id+"");
-        params.add(book.getBook_id()+"");
 
-
-            ArrayList<ArrayList<String>> results = dbController.getData(query,params);
-
-            return new Book(results.get(0));
-
-
+        ArrayList<ArrayList<String>> results = dbController.getData(query,params);
+        
+        if(results == null || results.size() == 0)
+            return null;
+        
+        return new Book(results.get(0));
     }
 
 
