@@ -119,7 +119,7 @@ public class BookView implements View
         return new String[]{
             Integer.toString(book.getId()),
             book.getTitle(),
-            book.getISBN()
+            book.getISBN()+""
         };
     }
 

@@ -12,6 +12,7 @@ public class MainContainer extends JFrame {
     private Container root;
     private View currentView = null;
     private ArrayList<View> previous;
+    private boolean backClicked = false;
 
     public static void main(String[] args){
         MainContainer mainContainer = new MainContainer();
@@ -39,10 +40,12 @@ public class MainContainer extends JFrame {
     }
 
     public void addView(View view){
-        if(currentView != null){
-            previous.add(currentView);
-        }
 
+        if(!backClicked) {
+            if (currentView != null) {
+                previous.add(currentView);
+            }
+        }
         currentView = view;
         int numPanels = root.getComponents().length;
 
@@ -60,6 +63,7 @@ public class MainContainer extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         System.out.print("");
+        backClicked = false;
     }
 
     public void showMessage(String message){
@@ -71,8 +75,10 @@ public class MainContainer extends JFrame {
     }
 
     private void goBack(){
-
-        View prev = previous.remove(previous.size()-1);
-        addView(prev);
+        if(previous.size() > 1) {
+            backClicked = true;
+            View prev = previous.remove(previous.size() - 1);
+            addView(prev);
+        }
     }
 }
