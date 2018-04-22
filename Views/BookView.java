@@ -6,6 +6,8 @@ import java.awt.event.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import Models.Book;
+import Controllers.BookController;
+import Controllers.Injector;
 
 public class BookView implements View
 {
@@ -25,6 +27,7 @@ public class BookView implements View
     private void viewSetup()
     {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        BookController bc = Injector.getBookController();
 
         //isbn
         JLabel lbl = new JLabel("ISBN: " + this.book.getISBN());
@@ -49,7 +52,7 @@ public class BookView implements View
         //buttons
         loan = new JButton("Loan");
 
-        if( this.canLoan )
+        if( this.canLoan && !bc.isLoaned(this.book) )
         {
             loan.setActionCommand("loan search");
             this.view.add(loan);

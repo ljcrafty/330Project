@@ -103,6 +103,20 @@ public class BookController {
         return new Loan(dbResults.get(0));
     }
 
+    public boolean isLoaned(Book book)
+    {
+        String query = "SELECT user_id "+
+                "FROM loans "+
+                "WHERE book_id = ? AND copy_id = ?";
+
+        ArrayList<String> params = new ArrayList<>();
+        params.add(this.getBookDetailId(book)+"");
+        params.add(book.getId()+"");
+
+        ArrayList<ArrayList<String>> dbResults = dbController.getData(query,params);
+        return !(dbResults == null || dbResults.size() == 0);
+    }
+
     public Loan[] getLoans(int userId)
     {
         String query = "SELECT users.user_id, users.username, users.first_name, users.last_name, book_details.book_id, book_details.isbn,"+
