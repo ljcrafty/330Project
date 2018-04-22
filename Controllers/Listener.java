@@ -110,7 +110,28 @@ public class Listener implements ActionListener
                   case " Search for a User":{
                         View search = new SearchView("User",userRole);
                         show(search,e);
-                  }
+                  }break;
+
+                  case " Check Overdue Loans":{
+                        ArrayList<Loan> loans = bc.getAllLoanDetails(true);
+                        if(loans == null) loans = new ArrayList<>();    //in case there are no overdue books
+
+                        Object[] data = new Object[loans.size()];
+
+                        for(int i=0; i< loans.size(); i++){
+                              data[i] = loans.get(i);
+                        }
+
+                        View v = new CollectionOverview("Loan");
+                        v.setData(data);
+
+                        show(v,e);
+                  }break;
+
+                  case " Search Reservations":{
+                        View search = new SearchView("Reservation",userRole);
+                        show(search,e);
+                  }break;
                   default:
                         break;
             }//end switch
@@ -473,9 +494,9 @@ public class Listener implements ActionListener
                   case "Loan":{
                         results = bc.searchLoans(searchParams);
                   }break;
-                  case "Reservations":{
+                  case "Reservation":{
                         results = bc.searchReservations(searchParams);
-                  }
+                  }break;
                   case "User":{
                         results = uc.searchUsers(searchParams);
                   }break;
