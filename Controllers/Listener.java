@@ -412,7 +412,7 @@ public class Listener implements ActionListener
             else
             {
                   //make user
-                  User temp = new User(fields[0], fields[1], fields[2], fields[3], 1, dob, 1);
+                  User temp = new User(fields[0], fields[1], fields[2], fields[3], 2, dob, 1);
                   
                   //try to add user
                   if( uc.addUser(temp) )
