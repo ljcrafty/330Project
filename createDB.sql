@@ -101,9 +101,11 @@ INSERT INTO roles
     VALUES(2, 'User', 'Has access to create, modify, and delete only data related to themselves');
 
 INSERT INTO users 
-    VALUES(1, 'admin', '$2a$12$9WvSGeQ9.aUddnTwDGEivubDVItFY7ast1H7TZfq2cybJ29INLH7i', 'Admin',
-    'Admin', '1950-01-01');
-
+    VALUES(1, 'librarian', '$2a$07$rJNj6GH5X8NHmRGICwF0lea3lY04dwoucIFagSvBkAhlLxwqxsbhe', 'Jane',
+    'Doe', '1990-04-09');
+INSERT INTO users 
+    VALUES(2, 'user', '$2a$07$ho4YlKa4xTiRUriBlQq4u.eRMLSKuOhzj4zHV4jxf1xWNBHvTW9nW', 'John',
+    'Doe', '1980-10-15');
 
 INSERT INTO user_role 
     VALUES(1, 1);
