@@ -516,6 +516,7 @@ public class Listener implements ActionListener
                         results = bc.searchLoans(searchParams);
                   }break;
                   case "Reservation":{
+                        System.out.println(bc.searchReservations(searchParams));
                         results = bc.searchReservations(searchParams);
                   }break;
                   case "User":{

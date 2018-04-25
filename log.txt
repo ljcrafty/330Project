@@ -4,3 +4,15 @@ Message: : No suitable driver found for jdbc:mysql://localhost:3306/Library
 SQL State: : 08001
 Error Code: : 0
 
+Tue Apr 24 22:49:23 CEST 2018
+class java.sql.SQLException
+Message: : No suitable driver found for jdbc:mysql://localhost:3306/Library
+SQL State: : 08001
+Error Code: : 0
+
+Wed Apr 25 12:26:55 CEST 2018
+class java.sql.SQLException
+Message: : No suitable driver found for jdbc:mysql://localhost:3306/Library
+SQL State: : 08001
+Error Code: : 0
+

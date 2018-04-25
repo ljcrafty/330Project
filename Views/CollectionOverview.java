@@ -107,7 +107,8 @@ public class CollectionOverview implements View, ActionListener {
 
     @Override
     public void registerListeners(ActionListener listener) {
-        next.addActionListener(listener);
+        if(this.next != null)
+         next.addActionListener(listener);
     }
 
     @Override
@@ -217,7 +218,7 @@ public class CollectionOverview implements View, ActionListener {
 
             data.add(new JLabel(loan.getBook().getTitle()));
             data.add(new JLabel(loan.getBook().getAuthorFName()+" "+loan.getBook().getAuthorLName()));
-            data.add( new JLabel(format.format(loan.getDueDate())) );
+            data.add( new JLabel(format.format(loan.getDueDate().getTime())) );
 
             User temp = Injector.getUser().getUser(loan.getUserId());
             data.add(new JLabel(temp.getFName()+temp.getLName()));
@@ -245,11 +246,14 @@ public class CollectionOverview implements View, ActionListener {
             for(JLabel label: data){
                 this.add(label);
             }
-            this.add(this.select);
+            
+            if(this.select != null)
+               this.add(this.select);
         }
 
         public void registerInternalListeners(ActionListener listener){
-            select.addActionListener(listener);
+            if(this.select != null)
+               select.addActionListener(listener);
 
         }
 
@@ -263,11 +267,13 @@ public class CollectionOverview implements View, ActionListener {
         }
 
         public void deselect(){
-            this.select.setText("Select");
+            if(this.select != null)
+               this.select.setText("Select");
         }
 
         public void select(){
-            this.select.setText("Deselect");
+            if(this.select != null)
+               this.select.setText("Deselect");
         }
 
     }
